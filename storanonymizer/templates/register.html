@@ -1,0 +1,35 @@
+{% extends "base-auth.html" %}
+
+{% block content %}
+
+	<form class="storanonymizer__auth-field mdl-color--white mdl-shadow--8dp" action="register" method="post">
+		<h4><a href="{{ url_for('index') }}"><span class="bold">Storanonymizer</span></a> Registration</h4>
+
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<div class="auth__error mdl-cell mdl-cell--12-col mdl-shadow--4dp mdl-color--red">
+			{% for m in messages %}
+				<h6 class="mdl-color-text--white">
+					{{ m }}
+				</h6>
+			{% endfor %}
+			</div>
+		{% endif %}
+		{% endwith %}
+
+		<div class="mdl-textfield mdl-js-textfield">
+			<input class="mdl-textfield__input" type="text" name="name" id="name">
+			<label class="mdl-textfield__label" for="name">Name</label>
+		</div>
+		<div class="mdl-textfield mdl-js-textfield">
+			<input class="mdl-textfield__input" type="password" name="password" id="password">
+			<label class="mdl-textfield__label" for="password">Password</label>
+		</div>
+		<div class="mdl-textfield mdl-js-textfield">
+			<input class="mdl-textfield__input" type="password" name="password_check" id="password_check">
+			<label class="mdl-textfield__label" for="password_check">Password again</label>
+		</div>
+		<input type="submit" value="Register" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+	</form>
+
+{% endblock %}

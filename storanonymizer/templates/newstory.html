@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="storanonymizer__about-story mdl-grid mdl-color--primary">
+	<h4 class="mdl-cell mdl-cell--2-col">
+		New Story
+	</h4>
+	<div class="mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet">
+		A story is the contest where all participants submit their contributions. We shuffle all those contributions and publish them anonymized, so everyone involved will be able to vote judging only based on the written contributions, not on their authors.
+ 	</div>
+</div>
+
+<form class="storanonymizer__new-story-form mdl-shadow--4dp" action="story" method="post">
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<div class="storanonymizer__error mdl-cell mdl-cell--4-col mdl-shadow--4dp mdl-color--red">
+			{% for m in messages %}
+				<h6 class="mdl-color-text--white">
+					{{ m }}
+				</h6>
+			{% endfor %}
+			</div>
+		{% endif %}
+	{% endwith %}
+	<div class="mdl-textfield mdl-js-textfield">
+		<input class="mdl-textfield__input" type="text" name="name" id="story-name">
+		<label class="mdl-textfield__label" for="story-name">Story Name</label>
+	</div>
+	<input type="submit" value="Create Story" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+</form>
+
+{% endblock %}

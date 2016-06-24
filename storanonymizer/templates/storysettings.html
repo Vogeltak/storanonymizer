@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
+	<h4 class="storanonymizer__title-bar__title">Story settings</h4>
+</div>
+
+<div class="storanonymizer__sub-bar">
+	<a href="/story/{{ story.id }}">
+		<h5><i class="material-icons">arrow_back</i> {{ story.name }}</h5>
+	</a>
+</div>
+
+<div class="storanonymizer__settings-group mdl-grid">
+	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+		<h6><span class="bold">Contributions:</span> {{ story.contributions|length() }}</h6>
+	</div>
+	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-contributions-switch">
+			<input type="checkbox" id="public-contributions-switch" class="mdl-switch__input" {% if story.public_contributions %}checked{% endif %}>
+  			<span class="mdl-switch__label">Publish Contributions</span>
+		</label>
+		<hr>
+		<p>When Publish Contributions is set to true, everyone visiting the story page will be able to view all contributions submitted to that story.</p>
+	</div>
+	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-authors-switch">
+			<input type="checkbox" id="public-authors-switch" class="mdl-switch__input" {% if story.public_authors %}checked{% endif %}>
+  			<span class="mdl-switch__label">Public Authors</span>
+		</label>
+		<hr>
+		<p>When Public Authors is set to true, the name of an author of a contribution gets published alongside the contribution.</p>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+	<script type="text/javascript">
+		
+		document.querySelector('#public-authors-switch').addEventListener('change', function() {
+			var req = new XMLHttpRequest();
+			req.open('GET', 'toggle/publicauthors', true);
+			req.send();
+		});
+
+		document.querySelector('#public-contributions-switch').addEventListener('change', function() {
+			var req = new XMLHttpRequest();
+			req.open('GET', 'toggle/publiccontributions', true);
+			req.send();
+		});
+
+	</script>
+
+{% endblock %}

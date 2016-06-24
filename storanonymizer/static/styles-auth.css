@@ -1,0 +1,53 @@
+/* Fixes weird additional white space */
+.mdl-layout__content {
+	margin-bottom: -10px;
+}
+
+.page-content {
+	height: 100vh;
+	width: 100vw;
+	background: #607D8B;
+	-webkit-display: flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+.storanonymizer__auth-field {
+	max-width: 100%;
+	box-sizing: border-box;
+	padding: 64px 48px;
+	-webkit-display: flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+.storanonymizer__auth-field a {
+	text-decoration: none;
+	color: #000;
+	opacity: 0.87;
+}
+
+.storanonymizer__auth-field a:hover {
+	text-decoration: underline;
+}
+
+.auth__error {
+	box-sizing: border-box;
+	padding: 0 20px;
+	margin-bottom: 32px;
+	margin-top: 0;
+}
+
+.auth__error h6 {
+	margin-top: 16px;
+	font-size: 1.1rem;
+	text-align: center;
+}
