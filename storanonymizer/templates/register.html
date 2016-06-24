@@ -3,7 +3,7 @@
 {% block content %}
 
 	<form class="storanonymizer__auth-field mdl-color--white mdl-shadow--8dp" action="register" method="post">
-		<h4><a href="{{ url_for('index') }}"><span class="bold">Storanonymizer</span></a> Registration</h4>
+		<h4><a href="{{ url_for('index') }}"><i class="material-icons">arrow_back</i><span class="bold">Storanonymizer</span></a> Registration</h4>
 
 		{% with messages = get_flashed_messages() %}
 		{% if messages %}
