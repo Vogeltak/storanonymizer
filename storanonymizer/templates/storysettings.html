@@ -7,14 +7,14 @@
 </div>
 
 <div class="storanonymizer__sub-bar">
-	<a href="/story/{{ story.id }}">
+	<a href="{{ url_for('story', story_code=story.code) }}">
 		<h5><i class="material-icons">arrow_back</i> {{ story.name }}</h5>
 	</a>
 </div>
 
 <div class="storanonymizer__settings-group mdl-grid">
 	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<h6><span class="bold">Contributions:</span> {{ story.contributions|length() }}</h6>
+		<h6><span class="bold">Contributions:</span> {{ story.contributions|length }}</h6>
 	</div>
 	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
 		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-contributions-switch">
@@ -31,6 +31,9 @@
 		</label>
 		<hr>
 		<p>When Public Authors is set to true, the name of an author of a contribution gets published alongside the contribution.</p>
+	</div>
+	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+		<a href="delete" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red mdl-color-text--white">Delete Story</a>
 	</div>
 </div>
 

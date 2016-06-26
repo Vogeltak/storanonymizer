@@ -4,17 +4,25 @@
 
 {% if current_user.is_authenticated %}
 <div class="storanonymizer__creation-bar mdl-color--primary">
-	<a class="mdl-button mdl-js-button mdl-color-text--white" href="{{ url_for('new_story') }}"><i class="material-icons mdl-color-text--white">add</i> New Story</a>
+	<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{{ url_for('new_story') }}"><i class="material-icons">add</i> New Story</a>
 </div>
 {% endif %}
 
 <div class="storanonymizer__story-list mdl-grid">
 {% for s in stories %}
 	<div class="storanonymizer__story-list-item mdl-cell--4-col mdl-shadow--4dp">
-		<div class="storanonymizer__story-list-item__title"><a href="/story/{{ s.id }}">{{ s.name }}</a></div>
+		<div class="storanonymizer__story-list-item__title"><a href="{{ url_for('story', story_code=s.code) }}">{{ s.name }}</a></div>
 		<div class="storanonymizer__story-list-item__user">created by {{ s.user.name }}</div>
 	</div>
+{% else %}
+	<h6>No stories yet!</h6>
 {% endfor %}
 </div>
 
+{% endblock %}
+
+{% block footer %}
+<footer class="mdl-mini-footer">
+	<div class="storanonymizer__credits">Made with <span class="strike">love</span> <i>a keyboard</i> by <a target="_blank" href="http://maxcrone.org">Max Crone</a></div>
+</footer>
 {% endblock %}

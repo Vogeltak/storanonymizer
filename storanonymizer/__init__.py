@@ -26,4 +26,4 @@ lm.login_view = "login"
 # Create Bcrypt instance
 bcrypt = Bcrypt(app)
 
-from storanonymizer import views, models, auth
+from storanonymizer import views, models, auth, utils

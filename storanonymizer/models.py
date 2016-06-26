@@ -6,7 +6,7 @@ class User(db.Model):
 	password_hash = db.Column(db.String(1024))
 
 	stories = db.relationship("Story", backref="user", lazy="select")
-	contributions = db.relationship("Contribution", backref="auhor", lazy="select")
+	contributions = db.relationship("Contribution", backref="author", lazy="select")
 
 	# These methods are required by
 	# Flask-Login
@@ -36,14 +36,17 @@ class User(db.Model):
 
 class Story(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
+	code = db.Column(db.String(), unique=True)
 	name = db.Column(db.String())
 	user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 	contributions = db.relationship("Contribution", backref="story", lazy="select")
 	public_authors = db.Column(db.Boolean(), default=False)
 	public_contributions = db.Column(db.Boolean(), default=False)
 
-	def __init__(self, name):
+	def __init__(self, name, code, user_id):
 		self.name = name
+		self.code = code
+		self.user_id = user_id
 
 	def __repr__(self):
 		return "<Story {}>".format(self.id)
@@ -51,14 +54,16 @@ class Story(db.Model):
 
 class Contribution(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
+	code = db.Column(db.String(), unique=True)
 	text = db.Column(db.Text())
 
 	author_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 	story_id = db.Column(db.Integer, db.ForeignKey("story.id"))
 
-	def __init__(self, text, author, story_id):
+	def __init__(self, text, code, author_id, story_id):
 		self.text = text
-		self.author = author
+		self.code = code
+		self.author_id = author_id
 		self.story_id = story_id
 
 	def __repr__(self):

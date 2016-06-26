@@ -25,11 +25,7 @@
 }
 
 .mdl-layout__drawer {
-	-webkit-justify-content: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	-webkit-align-items: center;
-	align-items: center;
+	
 }
 
 .storanonymizer__creation-bar {
@@ -40,8 +36,8 @@
 	display: flex;
 	-webkit-align-items: center;
 	align-items: center;
-	-webkit-justify-content: center;
-	justify-content: center;
+	-webkit-justify-content: space-between;
+	justify-content: space-between;
 }
 
 .storanonymizer__about-story {
@@ -138,6 +134,62 @@
 	justify-content: center;
 }
 
+.storanonymizer__contribution-form {
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+.storanonymizer__contribution-form textarea {
+	height: calc(100vh - 145px);
+	overflow: visible;
+	resize: none;
+	line-height: 1.8rem;
+	word-spacing: 0.15rem;
+}
+
+.mdl-textfield__input.mobile {
+	display: none !important;
+}
+
+.storanonymizer__contribution-wrapper {
+	-webkit-display: flex;
+	display: flex;
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+.storanonymizer__contribution {
+	padding: 32px;
+	width: 40vw;
+	max-width: 100%;
+	margin-top: -100px;
+	margin-bottom: 16px;
+}
+
+.storanonymizer__contribution__title {
+	font-size: 1.6rem;
+}
+
+.storanonymizer__contribution__sub-title a {
+	color: rgba(0,0,0,0.6);
+	text-decoration: none;
+}
+
+.storanonymizer__contribution__sub-title a:hover {
+	color: rgba(0,0,0,0.4);
+}
+
+.storanonymizer__contribution__sub-title {
+	font-size: 1.2rem;
+	color: rgba(0,0,0,0.5);
+}
+
+.storanonymizer__contribution__text p {
+	word-spacing: 0.2rem;
+	line-height: 1.8rem;
+	font-size: 1.3rem;
+}
+
 .mdl-mini-footer {
 	-webkit-justify-content: center;
 	-ms-flex-pack: center;
@@ -163,8 +215,15 @@
 	text-align: center;
 }
 
+.storanonymizer__colored-background-bar {
+	width: 100vw;
+	height: 200px;
+	z-index: -1;
+}
+
 .strike { text-decoration: line-through; }
 .bold { font-weight: bold; }
+.italic { font-style: italic; }
 
 ::selection {
 	background: rgba(0,0,0,0.2);
@@ -182,5 +241,38 @@ hr {
 @media (max-width: 1024px) {
 	.page-content {
 		min-height: calc(100vh - 140px);
+	}
+
+	.storanonymizer__home-button {
+		margin-left: 4px;
+	}
+
+	.storanonymizer__contribution {
+		padding: 16px;
+		width: 60vw;
+	}
+}
+
+@media (max-width: 840px) {
+	.storanonymizer__contribution-form textarea {
+		height: calc(100vh - 189px);
+	}
+
+	.mdl-textfield__input.desktop {
+		display: none !important;
+	}
+	.mdl-textfield__input.mobile {
+		display: block !important;
+	}
+}
+
+@media (max-width: 512px) {
+	.storanonymizer__contribution {
+		width: 100vw;
+		margin-top: 0;
+	}
+
+	.storanonymizer__colored-background-bar {
+		display: none;
 	}
 }

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if contribution.story.public_contributions or contribution.author.id == current_user.id %}
+<div class="storanonymizer__colored-background-bar mdl-color--primary"></div>
+
+<div class="storanonymizer__contribution-wrapper">
+	<div class="storanonymizer__contribution mdl-color--white mdl-shadow--4dp">
+		<div class="storanonymizer__contribution__title"><span class="bold">{{ contribution.code }}</span>{% if contribution.story.public_authors or contribution.author.id == current_user.id %} | written by {{ contribution.author.name }}{% endif %}</div>
+		<div class="storanonymizer__contribution__sub-title">Contribution to <a href="{{ url_for('story', story_code=contribution.story.code) }}"><span class="bold">{{ contribution.story.name }}</span></a></div>
+		<hr>
+		<div class="storanonymizer__contribution__text">
+			<p>{{ contribution.text | safe }}</p>
+		</div>
+	</div>
+</div>
+{% else %}
+You're not supposed to look here
+{% endif %}
+{% endblock %}

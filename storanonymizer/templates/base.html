@@ -39,7 +39,7 @@
 
 							<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="storanonymizer_user-option-menu">
 								<a class="mdl-menu__item" href="{{ url_for('my_stories') }}">My Stories</a>
-								<a class="mdl-menu__item" href="#">My Contributions</a>
+								<a class="mdl-menu__item" href="{{ url_for('my_contributions') }}">My Contributions</a>
 								<a class="mdl-menu__item mdl-color-text--red" href="{{ url_for('logout') }}">Logout</a>
 							</ul>
 						</span>
@@ -53,30 +53,28 @@
 
 			<!-- Mobile menu -->
 			<div class="mdl-layout__drawer mdl-layout--small-screen-only">
-				<span class="mdl-layout-title">
-				{% if current_user.is_authenticated %}
-					<button id="storanonymizer_user-option-menu--mobile" class="mdl-button mdl-js-button">
-						{{ current_user.name }} <i class="material-icons">arrow_drop_down</i>
-					</button>
-
-					<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="storanonymizer_user-option-menu--mobile">
-						<a class="mdl-menu__item" href="{{ url_for('my_stories') }}">My Stories</a>
-						<a class="mdl-menu__item" href="#">My Contributions</a>
-						<a class="mdl-menu__item mdl-color-text--red" href="{{ url_for('logout') }}">Logout</a>
-					</ul>
-				{% else %}
-					<a class="mdl-button mdl-js-button" href="{{ url_for('register') }}">Register</a>
-					<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{{ url_for('login') }}">Login</a>
-				{% endif %}
-				</span>
+			{% if current_user.is_authenticated %}
+				<span class="mdl-layout-title">{{ current_user.name }}</span>
+				
+				<nav class="mdl-navigation">
+					<a class="mdl-navigation__link" href="{{ url_for('index') }}"><i class="material-icons">home</i> Home</a>
+					<a class="mdl-navigation__link" href="{{ url_for('my_stories') }}">My Stories</a>
+					<a class="mdl-navigation__link" href="{{ url_for('my_contributions') }}">My Contributions</a>
+					<a class="mdl-navigation__link mdl-color-text--red" href="{{ url_for('logout') }}">Logout</a>
+				</nav>
+			{% else %}
+				<a class="mdl-button mdl-js-button" href="{{ url_for('register') }}">Register</a>
+				<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{{ url_for('login') }}">Login</a>
+			{% endif %}
 			</div>
 
 			<main class="mdl-layout__content">
 				<div class="page-content">{% block content %}{% endblock %}</div>
-			
-				<footer class="mdl-mini-footer">
+				{% block footer %}{% endblock %}
+
+				<!--footer class="mdl-mini-footer">
 						<div class="storanonymizer__credits">Made with <span class="strike">love</span> <i>a keyboard</i> by <a target="_blank" href="http://maxcrone.org">Max Crone</a></div>
-				</footer>
+				</footer-->
 			</main>
 		</div>
 

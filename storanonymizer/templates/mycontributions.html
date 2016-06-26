@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
+	<h4 class="storanonymizer__title-bar__title">My Contributions</h4>
+</div>
+
+<div class="storanonymizer__story-list mdl-grid">
+{% for c in contributions %}
+	<div class="storanonymizer__story-list-item mdl-cell--4-col mdl-shadow--4dp">
+		<div class="storanonymizer__story-list-item__title"><a href="{{ url_for('contribution', contribution_code=c.code) }}">Contribution to <span class="italic">{{ c.story.name }}</span></a></div>
+		<div class="storanonymizer__story-list-item__user">{{ c.text|truncate }}</div>
+		{% if current_user.id == c.author.id %}
+		<hr>
+		<a href="{{ url_for('delete_contribution', contribution_code=c.code) }}" class="mdl-button mdl-js-button mdl-color-text--red">Delete</a>
+		{% endif %}
+	</div>
+{% else %}
+	<h6>No contributions yet!</h6>
+{% endfor %}
+</div>
+{% endblock %}
