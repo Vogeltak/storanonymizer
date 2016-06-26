@@ -99,8 +99,7 @@ def my_stories():
 @app.route("/story/<story_code>")
 def story(story_code):
 	story = models.Story.query.filter_by(code=story_code).first()
-	contributions = story.contributions
-	shuffle(contributions)
+	contributions = models.Contribution.query.filter_by(story_id=story.id).order_by(models.Contribution.code).all()
 
 	return render_template("story.html", story=story, contributions=contributions)
 
