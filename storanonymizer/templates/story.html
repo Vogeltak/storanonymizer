@@ -5,6 +5,14 @@
 <div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
 	<h4 class="storanonymizer__title-bar__title">{{ story.name }}</h4>
 	<div class="storanonymizer__title-bar__subtitle">created by {{ story.user.name }}</div>
+	{% if story.voting or story.public_votes %}
+	<a class="storanonymizer__voting-button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" id="voting-button" href="{{ url_for('votes', story_code=story.code) }}">
+  		<i class="material-icons">assessment</i>
+	</a>
+	<div class="mdl-tooltip mdl-tooltip--right" for="voting-button">
+		Votes
+	</div>
+	{% endif %}
 </div>
 
 {% if current_user.is_authenticated%}

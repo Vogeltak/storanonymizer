@@ -7,6 +7,7 @@ class User(db.Model):
 
 	stories = db.relationship("Story", backref="user", lazy="select")
 	contributions = db.relationship("Contribution", backref="author", lazy="select")
+	votes = db.relationship("Vote", backref="user", lazy="select")
 
 	# These methods are required by
 	# Flask-Login
@@ -39,9 +40,14 @@ class Story(db.Model):
 	code = db.Column(db.String(), unique=True)
 	name = db.Column(db.String())
 	user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+	
 	contributions = db.relationship("Contribution", backref="story", lazy="select")
+	votes = db.relationship("Vote", backref="story", lazy="select")
+
 	public_authors = db.Column(db.Boolean(), default=False)
 	public_contributions = db.Column(db.Boolean(), default=False)
+	voting = db.Column(db.Boolean(), default=False)
+	public_votes = db.Column(db.Boolean(), default=False)
 
 	def __init__(self, name, code, user_id):
 		self.name = name
@@ -57,6 +63,8 @@ class Contribution(db.Model):
 	code = db.Column(db.String(), unique=True)
 	text = db.Column(db.Text())
 
+	votes = db.relationship("Vote", backref="contribution", lazy="select")
+
 	author_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 	story_id = db.Column(db.Integer, db.ForeignKey("story.id"))
 
@@ -68,3 +76,13 @@ class Contribution(db.Model):
 
 	def __repr__(self):
 		return "<Contribution {}>".format(self.id)
+
+class Vote(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	value = db.Column(db.Integer)
+	contribution_id = db.Column(db.Integer, db.ForeignKey("contribution.id"))
+	user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+	story_id = db.Column(db.Integer, db.ForeignKey("story.id"))
+
+	def __repr__(self):
+		return "<Vote {}>".format(self.id)

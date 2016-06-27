@@ -32,6 +32,22 @@
 		<hr>
 		<p>When Public Authors is set to true, the name of an author of a contribution gets published alongside the contribution.</p>
 	</div>
+	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="voting-switch">
+			<input type="checkbox" id="voting-switch" class="mdl-switch__input" {% if story.voting %}checked{% endif %}>
+  			<span class="mdl-switch__label">Voting</span>
+		</label>
+		<hr>
+		<p>When voting is enabled, every user is able to give points to their favorite contributions of a story.</p>
+	</div>
+	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-votes-switch">
+			<input type="checkbox" id="public-votes-switch" class="mdl-switch__input" {% if story.public_votes %}checked{% endif %}>
+  			<span class="mdl-switch__label">Public Votes</span>
+		</label>
+		<hr>
+		<p>When Public Votes is set to true, voting is disabled and everyone is able to see an overview of all awarded points.</p>
+	</div>
 	<a href="delete" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red mdl-color-text--white">Delete Story</a>
 </div>
 
@@ -50,6 +66,18 @@
 		document.querySelector('#public-contributions-switch').addEventListener('change', function() {
 			var req = new XMLHttpRequest();
 			req.open('GET', 'toggle/publiccontributions', true);
+			req.send();
+		});
+
+		document.querySelector('#voting-switch').addEventListener('change', function() {
+			var req = new XMLHttpRequest();
+			req.open('GET', 'toggle/voting', true);
+			req.send();
+		});
+
+		document.querySelector('#public-votes-switch').addEventListener('change', function() {
+			var req = new XMLHttpRequest();
+			req.open('GET', 'toggle/publicvotes', true);
 			req.send();
 		});
 
