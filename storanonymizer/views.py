@@ -98,7 +98,7 @@ def my_stories():
 
 @app.route("/story/<story_code>")
 def story(story_code):
-	story = models.Story.query.filter_by(code=story_code).first()
+	story = models.Story.query.filter_by(code=story_code).first_or_404()
 	contributions = models.Contribution.query.filter_by(story_id=story.id).order_by(models.Contribution.code).all()
 
 	return render_template("story.html", story=story, contributions=contributions)
@@ -198,7 +198,7 @@ def my_contributions():
 
 @app.route("/contribution/<contribution_code>")
 def contribution(contribution_code):
-	contribution = models.Contribution.query.filter_by(code=contribution_code).first()
+	contribution = models.Contribution.query.filter_by(code=contribution_code).first_or_404()
 
 	return render_template("contribution.html", contribution=contribution)
 
