@@ -8,7 +8,7 @@
 </div>
 
 <div class="storanonymizer__votes-wrapper mdl-grid">
-{% if (story.voting or story.public_votes) and story.public_contributions %}
+{% if (story.voting or story.public_votes) and story.public_contributions and current_user.is_authenticated %}
 	<div class="storanonymizer__votes__my-votes mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp">
 		<h4>My Votes <i class="material-icons mdl-color-text--red">favorite</i></h4>
 		<table class="mdl-data-table mdl-js-data-table">

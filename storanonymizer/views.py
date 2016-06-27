@@ -221,9 +221,13 @@ def delete_contribution(contribution_code):
 @app.route("/story/<story_code>/votes")
 def votes(story_code):
 	story = models.Story.query.filter_by(code=story_code).first()
-	user_votes = models.Vote.query.filter_by(story_id=story.id, user_id=current_user.id).order_by(models.Vote.value.desc())
+	
+	if current_user.is_authenticated:
+		user_votes = models.Vote.query.filter_by(story_id=story.id, user_id=current_user.id).order_by(models.Vote.value.desc())
 
-	return render_template("votes.html", story=story, user_votes=user_votes)
+		return render_template("votes.html", story=story, user_votes=user_votes)
+
+	return render_template("votes.html", story=story, user_votes=None)
 
 @app.route("/story/<story_code>/toggle/voting")
 @login_required
