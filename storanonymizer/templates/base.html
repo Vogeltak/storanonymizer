@@ -21,19 +21,14 @@
 			<header class="mdl-layout__header mdl-layout__header--scroll">
 				<div class="mdl-layout__header-row">
 					<!-- Title -->
-					<span class="mdl-layout-title"><a href="{{ url_for('index') }}">Storanonymizer</a></span>
-
-					<!-- Home button -->
-					<a class="storanonymizer__home-button mdl-button mdl-js-button mdl-button--icon" href="{{ url_for('index') }}">
-						<i class="material-icons">home</i>
-					</a>
+					<span class="mdl-layout-title"><a href="{{ url_for('index') }}"><i class="material-icons">home</i> Storanonymizer</a></span>
 						
 					<div class="mdl-layout-spacer"></div>
 
 					<nav class="mdl-navigation mdl-layout--large-screen-only">
 					{% if current_user.is_authenticated %}
 						<span class="mdl-navigation__link">
-							<button id="storanonymizer_user-option-menu" class="mdl-button mdl-js-button">
+							<button id="storanonymizer_user-option-menu" class="mdl-button mdl-js-button mdl-color-text--white">
 								{{ current_user.name }} <i class="material-icons">arrow_drop_down</i>
 							</button>
 

@@ -31,7 +31,7 @@
 <div class="storanonymizer__story-list mdl-grid">
 {% if story.public_contributions %}
 {% for c in contributions %}
-	<div class="storanonymizer__story-list-item mdl-cell--4-col mdl-shadow--4dp">
+	<div class="storanonymizer__story-list-item mdl-cell--5-col mdl-cell--6-col-tablet mdl-shadow--4dp">
 		<div class="storanonymizer__story-list-item__title"><a href="{{ url_for('contribution', contribution_code=c.code) }}"><span class="bold">{{ c.code }}</span>{% if story.public_authors %} | written by {{ c.author.name }} {% else %} {% if c.author.id == current_user.id %} | written by me{% endif %}{% endif %}</a></div>
 		<div class="storanonymizer__story-list-item__user">{{ c.text|truncate }}</div>
 		{% if current_user.id == c.author.id %}

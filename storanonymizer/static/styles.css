@@ -3,7 +3,7 @@
 }
 
 .mdl-layout-title a {
-	color: #424242;
+	color: rgba(255,255,255,0.87);	
 	text-decoration: none;
 }
 
@@ -16,12 +16,11 @@
 }
 
 .mdl-layout__header {
-	background: #fafafa;
-	color: #424242;
+	color: rgba(255,255,255,0.87);
 }
 
 .mdl-layout__drawer-button {
-	color: #424242 !important;
+	color: rgba(255,255,255,0.87) !important;
 }
 
 .mdl-layout__drawer {
@@ -30,7 +29,7 @@
 
 .storanonymizer__creation-bar {
 	width: 100%;
-	padding: 32px 16px;
+	padding: 24px 40px 24px 80px;
 	box-sizing: border-box;
 	-webkit-display: flex;
 	display: flex;
@@ -84,7 +83,7 @@
 }
 
 .storanonymizer__title-bar {
-	padding: 32px 16px;
+	padding: 24px 40px 24px 80px;
 }
 
 .storanonymizer__title-bar__title {
@@ -188,6 +187,7 @@
 	word-spacing: 0.2rem;
 	line-height: 1.8rem;
 	font-size: 1.3rem;
+	max-width: 100%;
 }
 
 .mdl-mini-footer {
@@ -263,6 +263,16 @@ hr {
 	}
 	.mdl-textfield__input.mobile {
 		display: block !important;
+	}
+
+	.storanonymizer__creation-bar {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+
+	.storanonymizer__title-bar {
+		padding-left: 16px;
+		padding-right: 16px;
 	}
 }
 

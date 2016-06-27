@@ -13,10 +13,10 @@
 </div>
 
 <div class="storanonymizer__settings-group mdl-grid">
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
 		<h6><span class="bold">Contributions:</span> {{ story.contributions|length }}</h6>
 	</div>
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
 		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-contributions-switch">
 			<input type="checkbox" id="public-contributions-switch" class="mdl-switch__input" {% if story.public_contributions %}checked{% endif %}>
   			<span class="mdl-switch__label">Publish Contributions</span>
@@ -24,7 +24,7 @@
 		<hr>
 		<p>When Publish Contributions is set to true, everyone visiting the story page will be able to view all contributions submitted to that story.</p>
 	</div>
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
 		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-authors-switch">
 			<input type="checkbox" id="public-authors-switch" class="mdl-switch__input" {% if story.public_authors %}checked{% endif %}>
   			<span class="mdl-switch__label">Public Authors</span>
@@ -32,9 +32,7 @@
 		<hr>
 		<p>When Public Authors is set to true, the name of an author of a contribution gets published alongside the contribution.</p>
 	</div>
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<a href="delete" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red mdl-color-text--white">Delete Story</a>
-	</div>
+	<a href="delete" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red mdl-color-text--white">Delete Story</a>
 </div>
 
 {% endblock %}
