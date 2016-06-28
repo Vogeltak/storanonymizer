@@ -102,8 +102,9 @@ def story(story_code):
 	contributions = models.Contribution.query.filter_by(story_id=story.id).order_by(models.Contribution.code).all()
 	userHasContributed = False
 
-	if models.Contribution.query.filter_by(story_id=story.id, author_id=current_user.id).first():
-		userHasContributed = True
+	if current_user.is_authenticated:
+		if models.Contribution.query.filter_by(story_id=story.id, author_id=current_user.id).first():
+			userHasContributed = True
 
 	return render_template("story.html", story=story, contributions=contributions, userHasContributed=userHasContributed)
 
