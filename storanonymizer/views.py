@@ -100,8 +100,12 @@ def my_stories():
 def story(story_code):
 	story = models.Story.query.filter_by(code=story_code).first_or_404()
 	contributions = models.Contribution.query.filter_by(story_id=story.id).order_by(models.Contribution.code).all()
+	userHasContributed = False
 
-	return render_template("story.html", story=story, contributions=contributions)
+	if models.Contribution.query.filter_by(story_id=story.id, author_id=current_user.id).first():
+		userHasContributed = True
+
+	return render_template("story.html", story=story, contributions=contributions, userHasContributed=userHasContributed)
 
 @app.route("/story/<story_code>/settings")
 @login_required
@@ -172,6 +176,10 @@ def new_contribution(story_code):
 	story = models.Story.query.filter_by(code=story_code).first()
 
 	if request.method == "POST":
+		if models.Contribution.query.filter_by(story_id=story.id, author_id=current_user.id).first():
+			flash("You have already contributed to this story!")
+			return redirect(url_for('story', story_code=story.code))
+
 		text = request.form["text"].replace("\r\n", "<br>")
 		code = ""
 
@@ -199,10 +207,12 @@ def my_contributions():
 @app.route("/contribution/<contribution_code>")
 def contribution(contribution_code):
 	contribution = models.Contribution.query.filter_by(code=contribution_code).first_or_404()
-	user_vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).first()
+	
+	if current_user.is_authenticated and contribution.story.voting:
+		user_vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).first()
 
-	if user_vote is not None:
-		return render_template("contribution.html", contribution=contribution, user_vote=user_vote.value)
+		if user_vote is not None:
+			return render_template("contribution.html", contribution=contribution, user_vote=user_vote.value)
 
 	return render_template("contribution.html", contribution=contribution, user_vote=None)
 
@@ -211,6 +221,9 @@ def delete_contribution(contribution_code):
 	contribution = models.Contribution.query.filter_by(code=contribution_code).first()
 
 	if current_user.id == contribution.author.id:
+		for v in contribution.votes:
+			db.session.delete(v)
+
 		db.session.delete(contribution)
 		db.session.commit()
 
@@ -221,13 +234,20 @@ def delete_contribution(contribution_code):
 @app.route("/story/<story_code>/votes")
 def votes(story_code):
 	story = models.Story.query.filter_by(code=story_code).first()
+	contributions = story.contributions
+	all_votes = None
+	user_votes = None
 	
+	for c in contributions:
+		c.total_score = sum([vote.value for vote in c.votes])
+
 	if current_user.is_authenticated:
 		user_votes = models.Vote.query.filter_by(story_id=story.id, user_id=current_user.id).order_by(models.Vote.value.desc())
+	
+	if story.public_votes:
+		all_votes = models.Vote.query.filter_by(story_id=story.id).all()
 
-		return render_template("votes.html", story=story, user_votes=user_votes)
-
-	return render_template("votes.html", story=story, user_votes=None)
+	return render_template("votes.html", story=story, user_votes=user_votes, ranking=contributions, all_votes=all_votes)
 
 @app.route("/story/<story_code>/toggle/voting")
 @login_required

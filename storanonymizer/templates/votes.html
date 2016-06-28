@@ -4,13 +4,14 @@
 
 <div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
 	<h4 class="storanonymizer__title-bar__title">Votes</h4>
-	<div class="storanonymizer__title-bar__subtitle">concerning <a href="{{ url_for('story', story_code=story.code) }}"><span class="bold">{{ story.name }}</span></a></div>
+	<div class="storanonymizer__title-bar__subtitle">from <a href="{{ url_for('story', story_code=story.code) }}"><span class="bold">{{ story.name }}</span></a></div>
 </div>
 
 <div class="storanonymizer__votes-wrapper mdl-grid">
 {% if (story.voting or story.public_votes) and story.public_contributions and current_user.is_authenticated %}
-	<div class="storanonymizer__votes__my-votes mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp">
+	<div class="storanonymizer__votes__my-votes mdl-cell mdl-cell--6-col mdl-color--white">
 		<h4>My Votes <i class="material-icons mdl-color-text--red">favorite</i></h4>
+		<hr>
 		<table class="mdl-data-table mdl-js-data-table">
 			<thead>
 				<tr>
@@ -36,9 +37,62 @@
 	</div>
 {% endif %}
 {% if story.public_votes %}
-	<div class="storanonymizer__votes__result mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp">
+	<div class="storanonymizer__votes__result mdl-cell mdl-cell--6-col mdl-color--white">
 		<h4>Voting Results</h4>
 		<hr>
+		<table class="mdl-data-table mdl-js-data-table">
+			<thead>
+				<tr>
+					<th>Points</th>
+					<th class="mdl-data-table__cell--non-numeric">Contribution</th>
+					{% if story.public_authors %}
+					<th class="mdl-data-table__cell--non-numeric">Author</th>
+					{% endif %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for contribution in ranking|sort(True, attribute='total_score') %}
+				<tr>
+					<td>{{ contribution.total_score }}</td>
+					<td class="mdl-data-table__cell--non-numeric"><a href="{{ url_for('contribution', contribution_code=contribution.code) }}" class="bold mdl-color-text--grey-800">{{ contribution.code }}</a></td>
+					{% if story.public_authors %}
+					<td class="mdl-data-table__cell--non-numeric">{{ contribution.author.name }}</td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="storanonymizer__user-votes-wrapper mdl-grid">
+	{% for group in all_votes|groupby('user.name') %}
+	<div class="storanonymizer__votes__user-vote mdl-cell mdl-cell--4-col mdl-color--white">
+		<h6>{{ group.grouper }}</h6>
+		<hr>
+		<table class="mdl-data-table mdl-js-data-table">
+			<thead>
+				<tr>
+					<th>Points</th>
+					<th class="mdl-data-table__cell--non-numeric">Contribution</th>
+					{% if story.public_authors %}
+					<th class="mdl-data-table__cell--non-numeric">Author</th>
+					{% endif %}
+				</tr>
+			</thead>
+			<tbody>
+			{% for vote in group.list|sort(True, attribute='value') %}
+				<tr>
+					<td>{{ vote.value }}</td>
+					<td class="mdl-data-table__cell--non-numeric"><a href="{{ url_for('contribution', contribution_code=vote.contribution.code) }}" class="bold mdl-color-text--grey-800">{{ vote.contribution.code }}</a></td>
+					{% if story.public_authors %}
+					<td class="mdl-data-table__cell--non-numeric">{{ vote.contribution.author.name }}</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+			</tbody>			
+		</table>
+	</div>
+	{% endfor %}
 	</div>
 {% endif %}
 
