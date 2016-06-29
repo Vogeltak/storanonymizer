@@ -63,8 +63,11 @@
 			</tbody>
 		</table>
 	</div>
+{% endif %}
 
-	<div class="storanonymizer__user-votes-wrapper mdl-grid">
+</div>
+
+<div class="storanonymizer__user-votes-wrapper mdl-grid">
 	{% for group in all_votes|groupby('user.name') %}
 	<div class="storanonymizer__votes__user-vote mdl-cell mdl-cell--4-col mdl-color--white">
 		<h6>{{ group.grouper }}</h6>
@@ -94,9 +97,6 @@
 	</div>
 	{% endfor %}
 	</div>
-{% endif %}
-
-</div>
 
 
 
