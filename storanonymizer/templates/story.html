@@ -39,6 +39,10 @@
 {% endwith %}
 
 <div class="storanonymizer__story-list mdl-grid">
+
+<!-- Story introduction text -->
+<a class="storanonymizer__story-introduction-button mdl-button mdl-js-button mdl-js-ripple-effect" href="{{ url_for('story_introduction', story_code=story.code) }}">Read the story introduction <i class="material-icons">book</i></a>
+
 {% if story.public_contributions %}
 {% for c in contributions %}
 	<div class="storanonymizer__story-list-item mdl-cell--5-col mdl-cell--6-col-tablet mdl-shadow--4dp">

@@ -68,8 +68,9 @@ def register():
 def new_story():
 	if request.method == "POST":
 		name = request.form["name"]
+		introduction = request.form["introduction"].replace("\r\n", "<br>")
 
-		if name == "":
+		if name == "" or introduction == "":
 			flash("Not all fields were filled in")
 			return redirect(url_for("new_story"))
 		else:
@@ -80,7 +81,7 @@ def new_story():
 				if models.Story.query.filter_by(code=code).first() is None:
 					break
 
-			story = models.Story(name, code, current_user.id)
+			story = models.Story(name, introduction, code, current_user.id)
 			
 			db.session.add(story)
 			db.session.commit()
@@ -107,6 +108,12 @@ def story(story_code):
 			userHasContributed = True
 
 	return render_template("story.html", story=story, contributions=contributions, userHasContributed=userHasContributed)
+
+@app.route("/story/<story_code>/introduction")
+def story_introduction(story_code):
+	story = models.Story.query.filter_by(code=story_code).first_or_404()
+
+	return render_template("storyintroduction.html", story=story)
 
 @app.route("/story/<story_code>/settings")
 @login_required

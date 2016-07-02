@@ -40,6 +40,7 @@ class Story(db.Model):
 	code = db.Column(db.String(), unique=True)
 	name = db.Column(db.String())
 	user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+	introduction_text = db.Column(db.Text())
 	
 	contributions = db.relationship("Contribution", backref="story", lazy="select")
 	votes = db.relationship("Vote", backref="story", lazy="select")
@@ -49,8 +50,9 @@ class Story(db.Model):
 	voting = db.Column(db.Boolean(), default=False)
 	public_votes = db.Column(db.Boolean(), default=False)
 
-	def __init__(self, name, code, user_id):
+	def __init__(self, name, text, code, user_id):
 		self.name = name
+		self.introduction_text = text
 		self.code = code
 		self.user_id = user_id
 

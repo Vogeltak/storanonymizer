@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="storanonymizer__colored-background-bar mdl-color--primary"></div>
+
+<div class="storanonymizer__contribution-wrapper">
+	<div class="storanonymizer__contribution mdl-color--white mdl-shadow--4dp">
+		<div class="storanonymizer__contribution__title">
+			<span class="bold">Story introduction</span> | created by {{ story.user.name }}
+		</div>
+		<div class="storanonymizer__contribution__sub-title">
+			from  
+			<a href="{{ url_for('story', story_code=story.code) }}">
+				<span class="bold">{{ story.name }}</span>
+			</a>
+		</div>
+		<hr>
+		<div class="storanonymizer__contribution__text">
+			<p>{{ story.introduction_text | safe }}</p>
+		</div>
+	</div>
+</div>
+{% endblock %}
