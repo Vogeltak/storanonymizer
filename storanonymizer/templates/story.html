@@ -44,6 +44,10 @@
 <a class="storanonymizer__story-introduction-button mdl-button mdl-js-button mdl-js-ripple-effect" href="{{ url_for('story_introduction', story_code=story.code) }}">Read the story introduction <i class="material-icons">book</i></a>
 
 {% if story.public_contributions %}
+{% if story.contributions|length > 0 %}
+<p><span class="italic">{{ story.contributions|length }} contributions submitted</span></p>
+{% endif %}
+
 {% for c in contributions %}
 	<div class="storanonymizer__story-list-item mdl-cell--5-col mdl-cell--6-col-tablet mdl-shadow--4dp">
 		<div class="storanonymizer__story-list-item__title"><a href="{{ url_for('contribution', contribution_code=c.code) }}"><span class="bold">{{ c.code }}</span>{% if story.public_authors %} | written by {{ c.author.name }} {% else %} {% if c.author.id == current_user.id %} | written by me{% endif %}{% endif %}</a></div>
@@ -59,7 +63,9 @@
 {% else %}
 	<h6>No contributions published yet!</h6>
 	{% if story.contributions|length > 0 %}
-	<p><span class="italic">{{ story.contributions|length }} contributions submitted</span></p>
+	<p>
+		<span class="italic">{{ story.contributions|length }} contributions submitted</span>
+	</p>
 	{% endif %}
 {% endif %}
 </div>

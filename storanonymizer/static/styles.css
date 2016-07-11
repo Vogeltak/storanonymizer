@@ -146,8 +146,6 @@
 	display: flex;
 	-webkit-flex-direction: column;
 	flex-direction: column;
-	-webkit-align-items: center;
-	align-items: center;
 	-webkit-justify-content: center;
 	justify-content: center;
 }
@@ -231,6 +229,11 @@
 
 #point-selector {
 	padding: 8px;
+}
+
+.storanonymizer__name-list {
+	list-style: none;
+	margin-top: 0;
 }
 
 .mdl-mini-footer {
