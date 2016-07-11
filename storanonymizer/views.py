@@ -301,7 +301,7 @@ def vote(contribution_code, value):
 	if contribution.story.voting and str(value) in "0123" and not contribution.author.id == current_user.id:
 		vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).first()
 
-		if value == 0:
+		if value == str(0):
 			db.session.delete(vote)
 		else:
 			if vote is None:
