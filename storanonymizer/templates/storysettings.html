@@ -29,7 +29,7 @@
 		<ul class="storanonymizer__name-list">
 		{% for group in story.votes|groupby('user.name') %}
 			<li>
-			{{ group.grouper }}
+			{{ group.grouper }} - {{ group.list|length}}/3
 			</li>
 		{% endfor %}
 		</ul>
