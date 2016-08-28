@@ -1,3 +1,3 @@
 #!/bin/bash
 source env/bin/activate
-screen -dmS story python deploy.py
+screen -dmS escape python deploy.py
