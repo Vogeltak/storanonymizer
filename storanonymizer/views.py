@@ -82,7 +82,7 @@ def new_story():
 					break
 
 			story = models.Story(name, introduction, code, current_user.id)
-			
+
 			db.session.add(story)
 			db.session.commit()
 
@@ -215,7 +215,7 @@ def my_contributions():
 @app.route("/contribution/<contribution_code>")
 def contribution(contribution_code):
 	contribution = models.Contribution.query.filter_by(code=contribution_code).first_or_404()
-	
+
 	if current_user.is_authenticated and contribution.story.voting:
 		user_vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).first()
 
@@ -245,13 +245,13 @@ def votes(story_code):
 	contributions = story.contributions
 	all_votes = None
 	user_votes = None
-	
+
 	for c in contributions:
 		c.total_score = sum([vote.value for vote in c.votes])
 
 	if current_user.is_authenticated:
 		user_votes = models.Vote.query.filter_by(story_id=story.id, user_id=current_user.id).order_by(models.Vote.value.desc())
-	
+
 	if story.public_votes:
 		all_votes = models.Vote.query.filter_by(story_id=story.id).all()
 
@@ -298,7 +298,7 @@ def toggle_public_votes(story_code):
 def vote(contribution_code, value):
 	contribution = models.Contribution.query.filter_by(code=contribution_code).first()
 
-	if contribution.story.voting and str(value) in "0123" and not contribution.author.id == current_user.id:
+	if contribution.story.voting and str(value) in "012345" and not contribution.author.id == current_user.id:
 		vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).first()
 
 		if value == str(0):
