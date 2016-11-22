@@ -3,33 +3,33 @@
 {% block content %}
 
 <div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
-	<h4 class="storanonymizer__title-bar__title">Story settings</h4>
+	<h4 class="storanonymizer__title-bar__title">Round settings</h4>
 </div>
 
 <div class="storanonymizer__sub-bar">
-	<a href="{{ url_for('story', story_code=story.code) }}">
-		<h5><i class="material-icons">arrow_back</i> {{ story.name }}</h5>
+	<a href="{{ url_for('round', round_code=round.code) }}">
+		<h5><i class="material-icons">arrow_back</i> {{ round.name }}</h5>
 	</a>
 </div>
 
 <div class="storanonymizer__settings-group mdl-grid">
 	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<h6><span class="bold">Contributions:</span> {{ story.contributions|length }}</h6>
+		<h6><span class="bold">Contributions:</span> {{ round.contributions|length }}</h6>
 		<ul class="storanonymizer__name-list">
-		{% for c in story.contributions|sort(attribute='author.name') %}
+		{% for c in round.contributions|sort(attribute='author.name') %}
 			<li>
 			{{ c.author.name }}
 			</li>
 		{% endfor %}
 		</ul>
 	</div>
-{% if story.votes %}
+{% if round.votes %}
 	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<h6><span class="bold">Votes:</span> {{ story.votes|groupby('user.name')|length }}</h6>
+		<h6><span class="bold">Votes:</span> {{ round.votes|groupby('user.name')|length }}</h6>
 		<ul class="storanonymizer__name-list">
-		{% for group in story.votes|groupby('user.name') %}
+		{% for group in round.votes|groupby('user.name') %}
 			<li>
-			{{ group.grouper }} - {{ group.list|length}}/3
+			{{ group.grouper }} - {{ group.list|length}}/5
 			</li>
 		{% endfor %}
 		</ul>
@@ -37,15 +37,15 @@
 {% endif %}
 	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
 		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-contributions-switch">
-			<input type="checkbox" id="public-contributions-switch" class="mdl-switch__input" {% if story.public_contributions %}checked{% endif %}>
+			<input type="checkbox" id="public-contributions-switch" class="mdl-switch__input" {% if round.public_contributions %}checked{% endif %}>
   			<span class="mdl-switch__label">Publish Contributions</span>
 		</label>
 		<hr>
-		<p>When Publish Contributions is set to true, everyone visiting the story page will be able to view all contributions submitted to that story.</p>
+		<p>When Publish Contributions is set to true, everyone visiting the round page will be able to view all contributions submitted to that round.</p>
 	</div>
 	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
 		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-authors-switch">
-			<input type="checkbox" id="public-authors-switch" class="mdl-switch__input" {% if story.public_authors %}checked{% endif %}>
+			<input type="checkbox" id="public-authors-switch" class="mdl-switch__input" {% if round.public_authors %}checked{% endif %}>
   			<span class="mdl-switch__label">Public Authors</span>
 		</label>
 		<hr>
@@ -53,21 +53,21 @@
 	</div>
 	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
 		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="voting-switch">
-			<input type="checkbox" id="voting-switch" class="mdl-switch__input" {% if story.voting %}checked{% endif %}>
+			<input type="checkbox" id="voting-switch" class="mdl-switch__input" {% if round.voting %}checked{% endif %}>
   			<span class="mdl-switch__label">Voting</span>
 		</label>
 		<hr>
-		<p>When voting is enabled, every user is able to give points to their favorite contributions of a story.</p>
+		<p>When voting is enabled, every user is able to give points to their favorite contributions of a round.</p>
 	</div>
 	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
 		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-votes-switch">
-			<input type="checkbox" id="public-votes-switch" class="mdl-switch__input" {% if story.public_votes %}checked{% endif %}>
+			<input type="checkbox" id="public-votes-switch" class="mdl-switch__input" {% if round.public_votes %}checked{% endif %}>
   			<span class="mdl-switch__label">Public Votes</span>
 		</label>
 		<hr>
 		<p>When Public Votes is set to true, voting is disabled and everyone is able to see an overview of all awarded points.</p>
 	</div>
-	<a href="delete" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red mdl-color-text--white">Delete Story</a>
+	<a href="delete" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red mdl-color-text--white">Delete round</a>
 </div>
 
 {% endblock %}
@@ -75,7 +75,7 @@
 {% block scripts %}
 
 	<script type="text/javascript">
-		
+
 		document.querySelector('#public-authors-switch').addEventListener('change', function() {
 			var req = new XMLHttpRequest();
 			req.open('GET', 'toggle/publicauthors', true);

@@ -4,11 +4,11 @@
 
 <div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
 	<h4 class="storanonymizer__title-bar__title">Votes</h4>
-	<div class="storanonymizer__title-bar__subtitle">from <a href="{{ url_for('story', story_code=story.code) }}"><span class="bold">{{ story.name }}</span></a></div>
+	<div class="storanonymizer__title-bar__subtitle">from <a href="{{ url_for('round', round_code=round.code) }}"><span class="bold">{{ round.name }}</span></a> in <a href="{{ url_for('story', story_code=round.story.code) }}"><span class="italic bold">{{ round.story.name }}</span></a></div>
 </div>
 
 <div class="storanonymizer__votes-wrapper mdl-grid">
-{% if (story.voting or story.public_votes) and story.public_contributions and current_user.is_authenticated %}
+{% if (round.voting or round.public_votes) and round.public_contributions and current_user.is_authenticated %}
 	<div class="storanonymizer__votes__my-votes mdl-cell mdl-cell--6-col mdl-color--white">
 		<h4>My Votes <i class="material-icons mdl-color-text--red">favorite</i></h4>
 		<hr>
@@ -17,7 +17,7 @@
 				<tr>
 					<th>Points</th>
 					<th class="mdl-data-table__cell--non-numeric">Contribution</th>
-					{% if story.public_authors %}
+					{% if round.public_authors %}
 					<th class="mdl-data-table__cell--non-numeric">Author</th>
 					{% endif %}
 				</tr>
@@ -27,16 +27,16 @@
 				<tr>
 					<td>{{ v.value }}</td>
 					<td class="mdl-data-table__cell--non-numeric"><a href="{{ url_for('contribution', contribution_code=v.contribution.code) }}" class="bold mdl-color-text--grey-800">{{ v.contribution.code }}</a></td>
-					{% if story.public_authors %}
+					{% if round.public_authors %}
 					<td class="mdl-data-table__cell--non-numeric">{{ v.contribution.author.name }}</td>
 					{% endif %}
 				</tr>
 			{% endfor %}
-			</tbody>			
+			</tbody>
 		</table>
 	</div>
 {% endif %}
-{% if story.public_votes %}
+{% if round.public_votes %}
 	<div class="storanonymizer__votes__result mdl-cell mdl-cell--6-col mdl-color--white">
 		<h4>Voting Results</h4>
 		<hr>
@@ -45,7 +45,7 @@
 				<tr>
 					<th>Points</th>
 					<th class="mdl-data-table__cell--non-numeric">Contribution</th>
-					{% if story.public_authors %}
+					{% if round.public_authors %}
 					<th class="mdl-data-table__cell--non-numeric">Author</th>
 					{% endif %}
 				</tr>
@@ -55,7 +55,7 @@
 				<tr>
 					<td>{{ contribution.total_score }}</td>
 					<td class="mdl-data-table__cell--non-numeric"><a href="{{ url_for('contribution', contribution_code=contribution.code) }}" class="bold mdl-color-text--grey-800">{{ contribution.code }}</a></td>
-					{% if story.public_authors %}
+					{% if round.public_authors %}
 					<td class="mdl-data-table__cell--non-numeric">{{ contribution.author.name }}</td>
 					{% endif %}
 				</tr>
@@ -67,7 +67,7 @@
 
 </div>
 
-{% if story.public_votes %}
+{% if round.public_votes %}
 <div class="storanonymizer__user-votes-wrapper mdl-grid">
 	{% for group in all_votes|groupby('user.name') %}
 	<div class="storanonymizer__votes__user-vote mdl-cell mdl-cell--4-col mdl-color--white">
@@ -78,7 +78,7 @@
 				<tr>
 					<th>Points</th>
 					<th class="mdl-data-table__cell--non-numeric">Contribution</th>
-					{% if story.public_authors %}
+					{% if round.public_authors %}
 					<th class="mdl-data-table__cell--non-numeric">Author</th>
 					{% endif %}
 				</tr>
@@ -88,12 +88,12 @@
 				<tr>
 					<td>{{ vote.value }}</td>
 					<td class="mdl-data-table__cell--non-numeric"><a href="{{ url_for('contribution', contribution_code=vote.contribution.code) }}" class="bold mdl-color-text--grey-800">{{ vote.contribution.code }}</a></td>
-					{% if story.public_authors %}
+					{% if round.public_authors %}
 					<td class="mdl-data-table__cell--non-numeric">{{ vote.contribution.author.name }}</td>
 					{% endif %}
 				</tr>
 			{% endfor %}
-			</tbody>			
+			</tbody>
 		</table>
 	</div>
 	{% endfor %}

@@ -2,6 +2,8 @@ from storanonymizer import app, models, auth, utils, db, lm
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_required, logout_user, current_user
 from random import shuffle
+from operator import attrgetter
+from itertools import groupby
 
 @app.route("/")
 def index():
@@ -68,9 +70,8 @@ def register():
 def new_story():
 	if request.method == "POST":
 		name = request.form["name"]
-		introduction = request.form["introduction"].replace("\r\n", "<br>")
 
-		if name == "" or introduction == "":
+		if name == "":
 			flash("Not all fields were filled in")
 			return redirect(url_for("new_story"))
 		else:
@@ -81,7 +82,7 @@ def new_story():
 				if models.Story.query.filter_by(code=code).first() is None:
 					break
 
-			story = models.Story(name, introduction, code, current_user.id)
+			story = models.Story(name, code, current_user.id)
 
 			db.session.add(story)
 			db.session.commit()
@@ -100,67 +101,46 @@ def my_stories():
 @app.route("/story/<story_code>")
 def story(story_code):
 	story = models.Story.query.filter_by(code=story_code).first_or_404()
-	contributions = models.Contribution.query.filter_by(story_id=story.id).order_by(models.Contribution.code).all()
-	userHasContributed = False
+	rounds = models.Round.query.filter_by(story_id=story.id).all()
 
-	if current_user.is_authenticated:
-		if models.Contribution.query.filter_by(story_id=story.id, author_id=current_user.id).first():
-			userHasContributed = True
+	return render_template("story.html", story=story, rounds=rounds)
 
-	return render_template("story.html", story=story, contributions=contributions, userHasContributed=userHasContributed)
-
-@app.route("/story/<story_code>/introduction")
-def story_introduction(story_code):
+@app.route("/story/<story_code>/ongoing")
+def full_story(story_code):
 	story = models.Story.query.filter_by(code=story_code).first_or_404()
 
-	return render_template("storyintroduction.html", story=story)
+	winning_contributions = []
 
-@app.route("/story/<story_code>/settings")
-@login_required
-def story_settings(story_code):
-	story = models.Story.query.filter_by(code=story_code).first()
+	for round in story.rounds:
+		if round.winning_contribution_id:
+			c = models.Contribution.query.get(int(round.winning_contribution_id))
+			winning_contributions.append(c)
 
-	if current_user.id is not story.user.id:
-		flash("You're not authorized to access the settings page!")
-		return redirect("/story/{}".format(story_code))
+	return render_template("fullstory.html", story=story, contributions=winning_contributions)
 
-	return render_template("storysettings.html", story=story)
+@app.route("/story/<story_code>/scoreboard")
+def story_scoreboard(story_code):
+	story = models.Story.query.filter_by(code=story_code).first_or_404();
+	rounds = story.rounds
+	contributions = []
 
-@app.route("/story/<story_code>/toggle/publicauthors")
-@login_required
-def toggle_public_authors(story_code):
-	story = models.Story.query.filter_by(code=story_code).first()
+	for r in rounds:
+		if r.public_votes:
+			for c in r.contributions:
+				c.total_score = sum([vote.value for vote in c.votes])
+				contributions.append(c)
 
-	if current_user.id == story.user.id:
-		if story.public_authors:
-			story.public_authors = False
-		else:
-			story.public_authors = True
+	ranking = []
 
-		db.session.add(story)
-		db.session.commit()
+	for author_name, author_contributions in groupby(sorted(contributions, key=attrgetter("author.name")), key=attrgetter("author.name")):
+		#groups.append({group: data})
+		ranking.append({"author": author_name, "score": sum([c.total_score for c in author_contributions])})
 
-		return redirect("/story/{}/settings".format(story_code))
+	# Sort ranking in descending order
+	# So the author with the highest score appears at the first index
+	ranking.sort(key=lambda x: x['score'], reverse=True)
 
-	return redirect("/story/{}".format(story_code))
-
-@app.route("/story/<story_code>/toggle/publiccontributions")
-@login_required
-def toggle_public_contributions(story_code):
-	story = models.Story.query.filter_by(code=story_code).first()
-
-	if current_user.id == story.user.id:
-		if story.public_contributions:
-			story.public_contributions = False
-		else:
-			story.public_contributions = True
-
-		db.session.add(story)
-		db.session.commit()
-
-		return redirect("/story/{}/settings".format(story_code))
-
-	return redirect("/story/{}".format(story_code))
+	return render_template("scoreboard.html", story=story, ranking=ranking)
 
 @app.route("/story/<story_code>/delete")
 @login_required
@@ -168,8 +148,10 @@ def delete_story(story_code):
 	story = models.Story.query.filter_by(code=story_code).first()
 
 	if current_user.id == story.user.id:
-		for c in story.contributions:
-			db.session.delete(c)
+		for r in story.rounds:
+			for c in r.contributions:
+				delete_contribution(c.code)
+			db.session.delete(r)
 
 		db.session.delete(story)
 		db.session.commit()
@@ -178,15 +160,89 @@ def delete_story(story_code):
 
 	return redirect(url_for("index"))
 
-@app.route("/story/<story_code>/new/contribution", methods=["GET", "POST"])
+@app.route("/story/<story_code>/delete/prompt")
 @login_required
-def new_contribution(story_code):
+def prompt_delete_story(story_code):
 	story = models.Story.query.filter_by(code=story_code).first()
 
+	return render_template("promptdeletestory.html", story=story)
+
+@app.route("/round/<round_code>")
+def round(round_code):
+	round = models.Round.query.filter_by(code=round_code).first_or_404()
+	contributions = models.Contribution.query.filter_by(round_id=round.id).order_by(models.Contribution.code).all()
+	userHasContributed = False
+
+	if current_user.is_authenticated:
+		if models.Contribution.query.filter_by(round_id=round.id, author_id=current_user.id).first():
+			userHasContributed = True
+
+	return render_template("round.html", round=round, contributions=contributions, userHasContributed=userHasContributed)
+
+@app.route("/story/<story_code>/new/round", methods=["GET", "POST"])
+@login_required
+def new_round(story_code):
+	story = models.Story.query.filter_by(code=story_code).first()
+
+	if request.method == "POST" and current_user.id == story.user.id:
+		name = request.form["name"]
+
+		if name == "":
+			flash("Not all fields were filled in")
+			return redirect(url_for("new_round"))
+		else:
+			code = ""
+
+			while True:
+				code = utils.gen_hex(8)
+				if models.Round.query.filter_by(code=code).first() is None:
+					break
+
+			round = models.Round(name, code, story.id)
+
+			db.session.add(round)
+			db.session.commit()
+
+			return redirect(url_for("round", round_code=round.code))
+
+	return render_template("newround.html")
+
+@app.route("/round/<round_code>/settings")
+@login_required
+def round_settings(round_code):
+	round = models.Round.query.filter_by(code=round_code).first()
+
+	if current_user.id is not round.story.user.id:
+		flash("You're not authorized to access the settings page!")
+		return redirect("/round/{}".format(round_code))
+
+	return render_template("roundsettings.html", round=round)
+
+@app.route("/round/<round_code>/delete")
+@login_required
+def delete_round(round_code):
+	round = models.Round.query.filter_by(code=round_code).first()
+
+	if current_user.id == round.story.user.id:
+		for c in round.contributions:
+			delete_contribution(c.code)
+
+		db.session.delete(round)
+		db.session.commit()
+	else:
+		return redirect(url_for("round", round_code=round.code))
+
+	return redirect(url_for("story", story_code=round.story.code))
+
+@app.route("/round/<round_code>/new/contribution", methods=["GET", "POST"])
+@login_required
+def new_contribution(round_code):
+	round = models.Round.query.filter_by(code=round_code).first()
+
 	if request.method == "POST":
-		if models.Contribution.query.filter_by(story_id=story.id, author_id=current_user.id).first():
-			flash("You have already contributed to this story!")
-			return redirect(url_for('story', story_code=story.code))
+		if models.Contribution.query.filter_by(round_id=round.id, author_id=current_user.id).first():
+			flash("You have already contributed to this round!")
+			return redirect(url_for('round', round_code=round.code))
 
 		text = request.form["text"].replace("\r\n", "<br>")
 		code = ""
@@ -196,14 +252,14 @@ def new_contribution(story_code):
 			if models.Contribution.query.filter_by(code=code).first() is None:
 				break
 
-		contribution = models.Contribution(text, code, current_user.id, story.id)
+		contribution = models.Contribution(text, code, current_user.id, round.id)
 
 		db.session.add(contribution)
 		db.session.commit()
 
 		return redirect(url_for("contribution", contribution_code=contribution.code))
 
-	return render_template("newcontribution.html", story=story)
+	return render_template("newcontribution.html", round=round)
 
 @app.route("/my/contributions")
 @login_required
@@ -216,7 +272,7 @@ def my_contributions():
 def contribution(contribution_code):
 	contribution = models.Contribution.query.filter_by(code=contribution_code).first_or_404()
 
-	if current_user.is_authenticated and contribution.story.voting:
+	if current_user.is_authenticated and contribution.round.voting:
 		user_vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).first()
 
 		if user_vote is not None:
@@ -239,10 +295,10 @@ def delete_contribution(contribution_code):
 
 	return redirect(url_for("contribution", contribution_code=contribution.code))
 
-@app.route("/story/<story_code>/votes")
-def votes(story_code):
-	story = models.Story.query.filter_by(code=story_code).first()
-	contributions = story.contributions
+@app.route("/round/<round_code>/votes")
+def votes(round_code):
+	round = models.Round.query.filter_by(code=round_code).first()
+	contributions = round.contributions
 	all_votes = None
 	user_votes = None
 
@@ -250,55 +306,103 @@ def votes(story_code):
 		c.total_score = sum([vote.value for vote in c.votes])
 
 	if current_user.is_authenticated:
-		user_votes = models.Vote.query.filter_by(story_id=story.id, user_id=current_user.id).order_by(models.Vote.value.desc())
+		user_votes = models.Vote.query.filter_by(round_id=round.id, user_id=current_user.id).order_by(models.Vote.value.desc())
 
-	if story.public_votes:
-		all_votes = models.Vote.query.filter_by(story_id=story.id).all()
+	if round.public_votes:
+		all_votes = models.Vote.query.filter_by(round_id=round.id).all()
 
-	return render_template("votes.html", story=story, user_votes=user_votes, ranking=contributions, all_votes=all_votes)
+	return render_template("votes.html", round=round, user_votes=user_votes, ranking=contributions, all_votes=all_votes)
 
-@app.route("/story/<story_code>/toggle/voting")
+@app.route("/round/<round_code>/toggle/voting")
 @login_required
-def toggle_voting(story_code):
-	story = models.Story.query.filter_by(code=story_code).first()
+def toggle_voting(round_code):
+	round = models.Round.query.filter_by(code=round_code).first()
 
-	if current_user.id == story.user.id:
-		if story.voting:
-			story.voting = False
+	if current_user.id == round.story.user.id:
+		if round.voting:
+			round.voting = False
 		else:
-			story.voting = True
+			round.voting = True
 
-		db.session.add(story)
+		db.session.add(round)
 		db.session.commit()
 
-		return redirect("/story/{}/settings".format(story_code))
+		return redirect("/round/{}/settings".format(round_code))
 
-	return redirect("/story/{}".format(story_code))
+	return redirect("/round/{}".format(round_code))
 
-@app.route("/story/<story_code>/toggle/publicvotes")
+@app.route("/round/<round_code>/toggle/publicauthors")
 @login_required
-def toggle_public_votes(story_code):
-	story = models.Story.query.filter_by(code=story_code).first()
+def toggle_public_authors(round_code):
+	round = models.Round.query.filter_by(code=round_code).first()
 
-	if current_user.id == story.user.id:
-		if story.public_votes:
-			story.public_votes = False
+	if current_user.id == round.story.user.id:
+		if round.public_authors:
+			round.public_authors = False
 		else:
-			story.public_votes = True
+			round.public_authors = True
 
-		db.session.add(story)
+		db.session.add(round)
 		db.session.commit()
 
-		return redirect("/story/{}/settings".format(story_code))
+		return redirect("/round/{}/settings".format(round_code))
 
-	return redirect("/story/{}".format(story_code))
+	return redirect("/round/{}".format(round_code))
+
+@app.route("/round/<round_code>/toggle/publiccontributions")
+@login_required
+def toggle_public_contributions(round_code):
+	round = models.Round.query.filter_by(code=round_code).first()
+
+	if current_user.id == round.story.user.id:
+		if round.public_contributions:
+			round.public_contributions = False
+		else:
+			round.public_contributions = True
+
+		db.session.add(round)
+		db.session.commit()
+
+		return redirect("/round/{}/settings".format(round_code))
+
+	return redirect("/round/{}".format(round_code))
+
+@app.route("/round/<round_code>/toggle/publicvotes")
+@login_required
+def toggle_public_votes(round_code):
+	round = models.Round.query.filter_by(code=round_code).first()
+
+	if current_user.id == round.story.user.id:
+		if round.public_votes:
+			round.public_votes = False
+		else:
+			round.public_votes = True
+
+		"""
+		 Calculate contribution with the most points from votes
+		"""
+		contributions = round.contributions
+
+		for c in contributions:
+			c.total_score = sum([vote.value for vote in c.votes])
+
+		winning_contribution = max(contributions, key=attrgetter("total_score"))
+
+		round.winning_contribution_id = winning_contribution.id
+
+		db.session.add(round)
+		db.session.commit()
+
+		return redirect("/round/{}/settings".format(round_code))
+
+	return redirect("/round/{}".format(round_code))
 
 @app.route("/vote/<contribution_code>/<value>")
 @login_required
 def vote(contribution_code, value):
 	contribution = models.Contribution.query.filter_by(code=contribution_code).first()
 
-	if contribution.story.voting and str(value) in "012345" and not contribution.author.id == current_user.id:
+	if contribution.round.voting and str(value) in "012345" and not contribution.author.id == current_user.id:
 		vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).first()
 
 		if value == str(0):
@@ -308,9 +412,9 @@ def vote(contribution_code, value):
 				vote = models.Vote()
 				vote.contribution_id = contribution.id
 				vote.user_id = current_user.id
-				vote.story_id = contribution.story.id
+				vote.round_id = contribution.round.id
 
-			same_valued_vote = models.Vote.query.filter_by(user_id=current_user.id, story_id=contribution.story.id, value=value).first()
+			same_valued_vote = models.Vote.query.filter_by(user_id=current_user.id, round_id=contribution.round.id, value=value).first()
 
 			if same_valued_vote is not None:
 				db.session.delete(same_valued_vote)

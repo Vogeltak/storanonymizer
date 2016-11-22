@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="storanonymizer__colored-background-bar mdl-color--primary"></div>
+
+<div class="storanonymizer__contribution-wrapper">
+	<div class="storanonymizer__contribution mdl-color--white mdl-shadow--4dp">
+		<div class="storanonymizer__contribution__title">
+			<a href="{{ url_for('story', story_code=story.code) }}"><span class="bold">{{ story.name }}</span></a>
+		</div>
+		<div class="storanonymizer__contribution__sub-title">Full ongoing story</div>
+		<hr>
+		<div class="storanonymizer__contribution__text">
+      {% for c in contributions %}
+        {% if c.round.public_votes %}
+          <p>{{ c.text | safe }}</p>
+        {% endif %}
+      {% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

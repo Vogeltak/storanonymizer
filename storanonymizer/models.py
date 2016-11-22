@@ -40,25 +40,42 @@ class Story(db.Model):
 	code = db.Column(db.String(), unique=True)
 	name = db.Column(db.String())
 	user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-	introduction_text = db.Column(db.Text())
-	
-	contributions = db.relationship("Contribution", backref="story", lazy="select")
-	votes = db.relationship("Vote", backref="story", lazy="select")
 
-	public_authors = db.Column(db.Boolean(), default=False)
-	public_contributions = db.Column(db.Boolean(), default=False)
-	voting = db.Column(db.Boolean(), default=False)
-	public_votes = db.Column(db.Boolean(), default=False)
+	rounds = db.relationship("Round", backref="story", lazy="select")
 
-	def __init__(self, name, text, code, user_id):
+	def __init__(self, name, code, user_id):
 		self.name = name
-		self.introduction_text = text
 		self.code = code
 		self.user_id = user_id
 
 	def __repr__(self):
 		return "<Story {}>".format(self.id)
 
+class Round(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String())
+	code = db.Column(db.String(), unique=True)
+
+	contributions = db.relationship("Contribution", backref="round", lazy="select")
+	votes = db.relationship("Vote", backref="round", lazy="select")
+
+	# ID of the contribution that won the round
+	winning_contribution_id = db.Column(db.String())
+
+	story_id = db.Column(db.Integer, db.ForeignKey("story.id"))
+
+	public_authors = db.Column(db.Boolean(), default=False)
+	public_contributions = db.Column(db.Boolean(), default=False)
+	voting = db.Column(db.Boolean(), default=False)
+	public_votes = db.Column(db.Boolean(), default=False)
+
+	def __init__(self, name, code, story_id):
+		self.name = name
+		self.code = code
+		self.story_id = story_id
+
+	def __repr__(self):
+		return "<Round {}>".format(self.id)
 
 class Contribution(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -68,13 +85,13 @@ class Contribution(db.Model):
 	votes = db.relationship("Vote", backref="contribution", lazy="select")
 
 	author_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-	story_id = db.Column(db.Integer, db.ForeignKey("story.id"))
+	round_id = db.Column(db.Integer, db.ForeignKey("round.id"))
 
-	def __init__(self, text, code, author_id, story_id):
+	def __init__(self, text, code, author_id, round_id):
 		self.text = text
 		self.code = code
 		self.author_id = author_id
-		self.story_id = story_id
+		self.round_id = round_id
 
 	def __repr__(self):
 		return "<Contribution {}>".format(self.id)
@@ -84,7 +101,7 @@ class Vote(db.Model):
 	value = db.Column(db.Integer)
 	contribution_id = db.Column(db.Integer, db.ForeignKey("contribution.id"))
 	user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-	story_id = db.Column(db.Integer, db.ForeignKey("story.id"))
+	round_id = db.Column(db.Integer, db.ForeignKey("round.id"))
 
 	def __repr__(self):
 		return "<Vote {}>".format(self.id)
