@@ -13,14 +13,14 @@
 	</div>
 </div>
 
-<div class="storanonymizer__sub-bar">
 {% if current_user.id == story.user.id %}
+<div class="storanonymizer__sub-bar">
 	<a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent" href="{{ url_for('new_round', story_code=story.code) }}"><i class="material-icons">add</i> Round</a>
 	<a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--red mdl-color-text--grey-100" href="{{ url_for('prompt_delete_story', story_code=story.code) }}">
 		<i class="material-icons">delete</i> Story
 	</a>
-{% endif %}
 </div>
+{% endif %}
 
 {% with messages = get_flashed_messages() %}
 	{% if messages %}

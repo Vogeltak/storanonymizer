@@ -6,7 +6,6 @@
 .page-content {
 	height: 100vh;
 	width: 100vw;
-	background: #607D8B;
 	-webkit-display: flex;
 	display: flex;
 	-webkit-flex-direction: column;

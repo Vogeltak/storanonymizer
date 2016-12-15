@@ -225,8 +225,9 @@ a:hover.storanonymizer__link {
 	padding: 32px;
 	width: 40vw;
 	max-width: 100%;
-	margin-top: -100px;
+	margin-top: -40vh;
 	margin-bottom: 16px;
+	border-top: 16px solid #00796b;
 }
 
 .storanonymizer__contribution__title {
@@ -314,7 +315,7 @@ a:hover.storanonymizer__link {
 
 .storanonymizer__colored-background-bar {
 	width: 100vw;
-	height: 200px;
+	height: 50vh;
 	z-index: -1;
 }
 
