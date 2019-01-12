@@ -48,7 +48,7 @@
 {% for c in contributions %}
 	<div class="storanonymizer__round-list-item mdl-cell--5-col mdl-cell--6-col-tablet mdl-shadow--4dp">
 		<div class="storanonymizer__round-list-item__title"><a href="{{ url_for('contribution', contribution_code=c.code) }}"><span class="bold">{{ c.code }}</span>{% if round.public_authors %} | written by {{ c.author.name }} {% else %} {% if c.author.id == current_user.id %} | written by me{% endif %}{% endif %}</a></div>
-		<div class="storanonymizer__round-list-item__user">{{ c.text|truncate }}</div>
+		<div class="storanonymizer__round-list-item__user">{{ c.text|truncate|safe }}</div>
 		{% if current_user.id == c.author.id %}
 		<hr>
 		<a href="{{ url_for('delete_contribution', contribution_code=c.code) }}" class="mdl-button mdl-js-button mdl-color-text--red">Delete</a>
