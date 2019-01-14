@@ -82,15 +82,23 @@ a:hover.storanonymizer__link {
 }
 
 .storanonymizer__story-list-item {
-	padding: 16px;
-	margin-top: 24px;
+	/*padding: 16px;
+	margin-top: 24px;*/
 	box-sizing: border-box;
 }
 
-.storanonymizer__story-list-item__title a {
+.storanonymizer__story-list-item .mdl-card__title {
+	background: url('https://source.unsplash.com/21DP3hytVHw') center/cover;
+	height: 200px;
+}
+
+.storanonymizer__story-list-item__title h2 {
 	text-decoration: none;
-	color: rgba(0,0,0,0.87);
-	font-size: 1.4rem;
+	/*color: rgba(0,0,0,0.87);
+	font-size: 1.4rem;*/
+	color: white;
+	padding: 2px 4px;
+	background: rgba(0,0,0,0.2);
 }
 
 .storanonymizer__story-list-item__user {

@@ -7,13 +7,15 @@
 
 <div class="storanonymizer__story-list mdl-grid">
 {% for c in contributions %}
-	<div class="storanonymizer__story-list-item mdl-cell--4-col mdl-shadow--4dp">
-		<div class="storanonymizer__story-list-item__title"><a href="{{ url_for('contribution', contribution_code=c.code) }}">Contribution to <span class="italic">{{ c.round.name }}</span> in {{ c.round.story.name }}</a></div>
-		<div class="storanonymizer__story-list-item__user">{{ c.text|truncate }}</div>
+	<div class="mdl-cell mdl-cell--4-col mdl-shadow--2dp">
+		<div class="mdl-card__title"><h2 href="" class="mdl-card__title-text">Contribution to {{ c.round.name }} in {{ c.round.story.name }}</h2></div>
+		<div class="mdl-card__supporting-text">{{ c.text|truncate|safe }}</div>
+		<div class="mdl-card__actions mdl-card--border">
+			<a href="{{ url_for('contribution', contribution_code=c.code) }}" class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect">View</a>
 		{% if current_user.id == c.author.id %}
-		<hr>
-		<a href="{{ url_for('delete_contribution', contribution_code=c.code) }}" class="mdl-button mdl-js-button mdl-color-text--red">Delete</a>
+			<a href="{{ url_for('delete_contribution', contribution_code=c.code) }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red">Delete</a>
 		{% endif %}
+		</div>
 	</div>
 {% else %}
 	<h6>No contributions yet!</h6>
