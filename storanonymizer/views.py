@@ -134,7 +134,9 @@ def story_scoreboard(story_code):
 
 	for author_name, author_contributions in groupby(sorted(contributions, key=attrgetter("author.name")), key=attrgetter("author.name")):
 		#groups.append({group: data})
-		ranking.append({"author": author_name, "score": sum([c.total_score for c in author_contributions])})
+		contrib_list = list(author_contributions)
+		ranking.append({"author": author_name, "score": sum([c.total_score for c in contrib_list]), "avg": sum([c.total_score for c in contrib_list]) / len(contrib_list)})
+	print(ranking)
 
 	# Sort ranking in descending order
 	# So the author with the highest score appears at the first index
