@@ -244,7 +244,7 @@ def new_contribution(round_code):
 			flash("You have already contributed to this round!")
 			return redirect(url_for('round', round_code=round.code))
 
-		text = request.form["text"].replace("\r\n", "<br>").replace("\t", "&emsp;")
+		text = request.form["text"].replace("\r\n", "<br>").replace("\t", "&emsp;&emsp;")
 		code = ""
 
 		while True:
