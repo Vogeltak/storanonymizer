@@ -13,7 +13,7 @@ app.secret_key = b"\x8b\x19\x0ei\xe3\x87YC\x0b\xdf\x9a6\xdf\xbe\xdf\xd2\xce\xd0\
 # Set app configs
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "../db/data.db")
-app.config["SQLALCHMEY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Create SQLAlchemy database instance
 db = SQLAlchemy(app)
