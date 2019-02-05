@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
+	<h4 class="storanonymizer__title-bar__title">{{ round.name }}</h4>
+	<div class="storanonymizer__title-bar__subtitle">created by {{ round.story.user.name }} in <a href="{{ url_for('story', story_code=round.story.code) }}"><span class="bold">{{ round.story.name }}</span></a></div>
+	{% if round.voting or round.public_votes %}
+	<a class="storanonymizer__voting-button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" id="voting-button" href="{{ url_for('votes', round_code=round.code) }}">
+  		<i class="material-icons">assessment</i>
+	</a>
+	<div class="mdl-tooltip mdl-tooltip--right" for="voting-button">
+		Votes
+	</div>
+	{% endif %}
+</div>
+
+{% if (current_user.is_authenticated and not round.voting) or current_user.id == round.story.user.id %}
+<div class="storanonymizer__sub-bar">
+	{% if not round.voting and not userHasContributed %}
+	<a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent" href="{{ url_for('new_contribution', round_code=round.code) }}"><i class="material-icons">add</i> Contribution</a>
+	{% endif %}
+	{% if current_user.id == round.story.user.id %}
+	<a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored" href="{{ url_for('round_settings', round_code=round.code)}}">Settings <i class="material-icons">settings</i></a>
+	{% endif %}
+</div>
+{% endif %}
+
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		<div class="storanonymizer__error mdl-cell mdl-cell--4-col mdl-shadow--4dp mdl-color--red">
+		{% for m in messages %}
+			<h6 class="mdl-color-text--white">
+				{{ m }}
+			</h6>
+		{% endfor %}
+		</div>
+	{% endif %}
+{% endwith %}
+
+<div class="storanonymizer__round-list mdl-grid">
+
+{% if round.public_contributions %}
+{% if round.contributions|length > 0 %}
+<p><span class="italic">{{ round.contributions|length }} contributions submitted</span></p>
+{% endif %}
+
+{% for c in contributions %}
+	<div class="storanonymizer__round-list-item mdl-cell--5-col mdl-cell--6-col-tablet mdl-shadow--4dp">
+		<div class="storanonymizer__round-list-item__title"><a href="{{ url_for('contribution', contribution_code=c.code) }}"><span class="bold">{{ c.code }}</span>{% if round.public_authors %} | written by {{ c.author.name }} {% else %} {% if c.author.id == current_user.id %} | written by me{% endif %}{% endif %}</a></div>
+		<div class="storanonymizer__round-list-item__user">{{ c.text|truncate|safe }}</div>
+		{% if current_user.id == c.author.id %}
+		<!--hr>
+		<a href="{{ url_for('delete_contribution', contribution_code=c.code) }}" class="mdl-button mdl-js-button mdl-color-text--red">Delete</a-->
+		{% endif %}
+	</div>
+{% else %}
+	<h6>No contributions yet!</h6>
+{% endfor %}
+{% else %}
+	<h6>No contributions published yet!</h6>
+	{% if round.contributions|length > 0 %}
+	<p>
+		<span class="italic">{{ round.contributions|length }} contributions submitted</span>
+	</p>
+	{% endif %}
+{% endif %}
+</div>
+
+{% endblock %}
