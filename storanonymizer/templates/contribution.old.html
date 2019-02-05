@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if contribution.round.public_contributions or contribution.author.id == current_user.id %}
+<div class="storanonymizer__colored-background-bar mdl-color--primary"></div>
+
+<div class="storanonymizer__contribution-wrapper">
+	<div class="storanonymizer__contribution mdl-color--white mdl-shadow--8dp">
+		<div class="storanonymizer__contribution__title">
+			<span class="bold">{{ contribution.code }}</span>
+			{% if contribution.round.public_authors or contribution.author.id == current_user.id %}
+				| written by {{ contribution.author.name }}
+			{% endif %}
+		</div>
+		<div class="storanonymizer__contribution__sub-title">Contribution to <a href="{{ url_for('round', round_code=contribution.round.code) }}"><span class="bold">{{ contribution.round.name }}</span></a> in <a href="{{ url_for('story', story_code=contribution.round.story.code) }}"><span class="italic bold">{{ contribution.round.story.name }}</span></a></div>
+		<hr>
+		{% if contribution.round.voting and current_user.is_authenticated and contribution.author.id != current_user.id %}
+		<select name="points" id="point-selector">
+			<option value="5" {% if user_vote == 5 %}selected{% endif %}>5 pts</option>
+			<option value="4" {% if user_vote == 4 %}selected{% endif %}>4 pts</option>
+			<option value="3" {% if user_vote == 3 %}selected{% endif %}>3 pts</option>
+			<option value="2" {% if user_vote == 2 %}selected{% endif %}>2 pts</option>
+			<option value="1" {% if user_vote == 1 %}selected{% endif %}>1 pt</option>
+			<option value="0" {% if user_vote is none %}selected{% endif %}>0 pts</option>
+		</select>
+		<hr>
+		{% endif %}
+		<div class="storanonymizer__contribution__text">
+			<p>{{ contribution.text | safe }}</p>
+		</div>
+	</div>
+</div>
+{% else %}
+You're not supposed to look here
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+var pointSelector = document.querySelector('#point-selector');
+
+pointSelector.addEventListener('change', function() {
+	var req = new XMLHttpRequest();
+	req.open('GET', '/vote/{{ contribution.code }}/' + pointSelector.value, true);
+	req.send();
+});
+
+</script>
+
+{% endblock %}

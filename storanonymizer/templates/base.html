@@ -1,81 +1,51 @@
 <!doctype html>
 <html lang="en">
-
 	<head>
+		<!-- Required meta tags -->
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<title>Story Anonymizer</title>
-
-		<!-- MDL and Google fonts -->
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-		<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.teal-amber.min.css" />
-		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
 		<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+		
+		{% if title %}
+		<title>{{ title }}</title>
+		{% else %}
+		<title>Story Anonymizer</title>
+		{% endif %}
 	</head>
-
 	<body>
-
-		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-			<header class="mdl-layout__header mdl-layout__header--scroll">
-				<div class="mdl-layout__header-row">
-					<!-- Title -->
-					<span class="mdl-layout-title"><a href="{{ url_for('index') }}">Storanonymizer</a></span>
-
-					<div class="mdl-layout-spacer"></div>
-
-					<nav class="mdl-navigation mdl-layout--large-screen-only">
-					{% if current_user.is_authenticated %}
-						<span class="mdl-navigation__link">
-							<button id="storanonymizer_user-option-menu" class="mdl-button mdl-js-button mdl-color-text--white">
-								{{ current_user.name }} <i class="material-icons">arrow_drop_down</i>
-							</button>
-
-							<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="storanonymizer_user-option-menu">
-								<a class="mdl-menu__item" href="{{ url_for('my_stories') }}">My Stories</a>
-								<a class="mdl-menu__item" href="{{ url_for('my_contributions') }}">My Contributions</a>
-								<a class="mdl-menu__item mdl-color-text--red" href="{{ url_for('logout') }}">Logout</a>
-							</ul>
-						</span>
-					{% else %}
-						<span class="mdl-navigation__link"><a class="mdl-button mdl-js-button mdl-color-text--grey-50" href="{{ url_for('register') }}">Register</a></span>
-						<span class="mdl-navigation__link"><a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{{ url_for('login') }}">Login</a></span>
-					{% endif %}
-					</nav>
+		<nav class="navbar navbar-light bg-white shadow-sm">
+			<a href="{{ url_for('index') }}" class="navbar-brand">Storanonymizer</a>
+			<div class="dropdown dropleft">
+				{% if current_user.is_authenticated %}
+				<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{{ current_user.name }}
+				</button>
+				<div class="dropdown-menu" aria-labelledby="userMenu">
+					<a class="dropdown-item" href="{{ url_for('my_stories') }}">Your stories</a>
+					<a class="dropdown-item" href="{{ url_for('my_contributions') }}">Your contributions</a>
+					<!--a class="dropdown-item" href="#">Settings</a-->
+					<a class="dropdown-item text-danger" href="{{ url_for('logout') }}">Log out</a>
 				</div>
-			</header>
-
-			<!-- Mobile menu -->
-			<div class="mdl-layout__drawer mdl-layout--small-screen-only">
-			{% if current_user.is_authenticated %}
-				<span class="mdl-layout-title">{{ current_user.name }}</span>
-
-				<nav class="mdl-navigation">
-					<a class="mdl-navigation__link" href="{{ url_for('index') }}"><i class="material-icons">home</i> Home</a>
-					<a class="mdl-navigation__link" href="{{ url_for('my_stories') }}">My Stories</a>
-					<a class="mdl-navigation__link" href="{{ url_for('my_contributions') }}">My Contributions</a>
-					<a class="mdl-navigation__link mdl-color-text--red" href="{{ url_for('logout') }}">Logout</a>
-				</nav>
-			{% else %}
-				<a class="mdl-button mdl-js-button" href="{{ url_for('register') }}">Register</a>
-				<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{{ url_for('login') }}">Login</a>
-			{% endif %}
+				{% else %}
+				<div>
+					<a class="btn btn-outline-dark" href="{{ url_for('register') }}">Register</a>
+					<a class="btn btn-primary" href="{{ url_for('login') }}">Login</a>
+				</div>
+				{% endif %}
 			</div>
-
-			<main class="mdl-layout__content">
-				<div class="page-content">{% block content %}{% endblock %}</div>
-				{% block footer %}{% endblock %}
-
-				<!--footer class="mdl-mini-footer">
-						<div class="storanonymizer__credits">Made with <span class="strike">love</span> <i>a keyboard</i> by <a target="_blank" href="http://maxcrone.org">Max Crone</a></div>
-				</footer-->
-			</main>
-		</div>
-
-		<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+		</nav>
+		{% block content %}{% endblock %}
+		
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 		{% block scripts %}{% endblock %}
-
 	</body>
-
 </html>
+	
