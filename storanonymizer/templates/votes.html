@@ -1,85 +1,98 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
-	<h4 class="storanonymizer__title-bar__title">Votes</h4>
-	<div class="storanonymizer__title-bar__subtitle">from <a href="{{ url_for('round', round_code=round.code) }}"><span class="bold">{{ round.name }}</span></a> in <a href="{{ url_for('story', story_code=round.story.code) }}"><span class="italic bold">{{ round.story.name }}</span></a></div>
+<div class="jumbotron bg-white mb-0">
+	<div class="container">
+		<h1>Votes</h1>
+		<p class="lead"><a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }}</a> / <a href="{{ url_for('round', round_code=round.code) }}">{{ round.name }}</a></p>
+		{% if round.voting %}
+		<span class="badge badge-secondary">in progress</span>
+		{% endif %}
+		{% if round.public_votes %}
+		<span class="badge badge-warning">finished</span>
+		{% endif %}
+	</div>
 </div>
 
-<div class="storanonymizer__votes-wrapper mdl-grid">
-{% if (round.voting or round.public_votes) and round.public_contributions and current_user.is_authenticated %}
-	<div class="storanonymizer__votes__my-votes mdl-cell mdl-cell--6-col mdl-color--white">
-		<h4>My Votes <i class="material-icons mdl-color-text--red">favorite</i></h4>
-		<hr>
-		<table class="mdl-data-table mdl-js-data-table">
-			<thead>
-				<tr>
-					<th>Points</th>
-					<th class="mdl-data-table__cell--non-numeric">Contribution</th>
-					{% if round.public_authors %}
-					<th class="mdl-data-table__cell--non-numeric">Author</th>
-					{% endif %}
-				</tr>
-			</thead>
-			<tbody>
-			{% for v in user_votes %}
-				<tr>
-					<td>{{ v.value }}</td>
-					<td class="mdl-data-table__cell--non-numeric"><a href="{{ url_for('contribution', contribution_code=v.contribution.code) }}" class="bold mdl-color-text--grey-800">{{ v.contribution.code }}</a></td>
-					{% if round.public_authors %}
-					<td class="mdl-data-table__cell--non-numeric">{{ v.contribution.author.name }}</td>
-					{% endif %}
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
+<div class="container">
+	<div class="row">
+		<!-- First: results -->
+		{% if round.public_votes %}
+		<div class="card col-12 col-md-6">
+			<div class="card-body">
+				<h4 class="card-title">Results</h4>
+				<table class="table table-sm">
+					<thead>
+						<tr>
+							<th>Points</th>
+							<th>Contribution</th>
+							{% if round.public_authors %}
+							<th>Author</th>
+							{% endif %}
+						</tr>
+					</thead>
+					<tbody>
+						{% for contribution in ranking|sort(True, attribute='total_score') %}
+						<tr>
+							<td>{{ contribution.total_score }}</td>
+							<td><a href="{{ url_for('contribution', contribution_code=contribution.code) }}">{{ contribution.code }}</a></td>
+							{% if round.public_authors %}
+							<td>{{ contribution.author.name }}</td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% endif %}
+		
+		<!-- Second: account votes -->
+		{% if (round.voting or round.public_votes) and round.public_contributions and current_user.is_authenticated %}
+		<div class="card col-12 col-md-6 col-xl-5 {% if round.public_votes %}offset-xl-1{% endif %}">
+			<div class="card-body">
+				<h4 class="card-title">Your votes</h4>
+				<table class="table table-sm">
+					<thead>
+						<tr>
+							<th>Points</th>
+							<th>Contribution</th>
+							{% if round.public_authors %}
+							<th>Author</th>
+							{% endif %}
+						</tr>
+					</thead>
+					<tbody>
+					{% for v in user_votes %}
+						<tr>
+							<td>{{ v.value }}</td>
+							<td><a href="{{ url_for('contribution', contribution_code=v.contribution.code) }}">{{ v.contribution.code }}</a></td>
+							{% if round.public_authors %}
+							<td>{{ v.contribution.author.name }}</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% endif %}
 	</div>
-{% endif %}
-{% if round.public_votes %}
-	<div class="storanonymizer__votes__result mdl-cell mdl-cell--6-col mdl-color--white">
-		<h4>Voting Results</h4>
-		<hr>
-		<table class="mdl-data-table mdl-js-data-table">
-			<thead>
-				<tr>
-					<th>Points</th>
-					<th class="mdl-data-table__cell--non-numeric">Contribution</th>
-					{% if round.public_authors %}
-					<th class="mdl-data-table__cell--non-numeric">Author</th>
-					{% endif %}
-				</tr>
-			</thead>
-			<tbody>
-				{% for contribution in ranking|sort(True, attribute='total_score') %}
-				<tr>
-					<td>{{ contribution.total_score }}</td>
-					<td class="mdl-data-table__cell--non-numeric"><a href="{{ url_for('contribution', contribution_code=contribution.code) }}" class="bold mdl-color-text--grey-800">{{ contribution.code }}</a></td>
-					{% if round.public_authors %}
-					<td class="mdl-data-table__cell--non-numeric">{{ contribution.author.name }}</td>
-					{% endif %}
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-{% endif %}
-
-</div>
-
-{% if round.public_votes %}
-<div class="storanonymizer__user-votes-wrapper mdl-grid">
+	
+	<!-- Third: all votes split by voter -->
+	{% if round.public_votes %}
+	<h4 class="card-title text-center mt-4 mb-4"><a class="btn btn-outline-primary" data-toggle="collapse" href="#allvotes" role="button" aria-expanded="false" aria-controls="allvotes">All votes</a></h4>
+	<div class="card-text row collapse" id="allvotes">
 	{% for group in all_votes|groupby('user.name') %}
-	<div class="storanonymizer__votes__user-vote mdl-cell mdl-cell--4-col mdl-color--white">
-		<h6>{{ group.grouper }}</h6>
-		<hr>
-		<table class="mdl-data-table mdl-js-data-table">
+	<div class="card card-body col-12 col-md-6 col-xl-4">
+		<h5 class="card-title">{{ group.grouper }}</h5>
+		<table class="table table-sm">
 			<thead>
 				<tr>
 					<th>Points</th>
-					<th class="mdl-data-table__cell--non-numeric">Contribution</th>
+					<th>Contribution</th>
 					{% if round.public_authors %}
-					<th class="mdl-data-table__cell--non-numeric">Author</th>
+					<th>Author</th>
 					{% endif %}
 				</tr>
 			</thead>
@@ -87,9 +100,9 @@
 			{% for vote in group.list|sort(True, attribute='value') %}
 				<tr>
 					<td>{{ vote.value }}</td>
-					<td class="mdl-data-table__cell--non-numeric"><a href="{{ url_for('contribution', contribution_code=vote.contribution.code) }}" class="bold mdl-color-text--grey-800">{{ vote.contribution.code }}</a></td>
+					<td><a href="{{ url_for('contribution', contribution_code=vote.contribution.code) }}">{{ vote.contribution.code }}</a></td>
 					{% if round.public_authors %}
-					<td class="mdl-data-table__cell--non-numeric">{{ vote.contribution.author.name }}</td>
+					<td>{{ vote.contribution.author.name }}</td>
 					{% endif %}
 				</tr>
 			{% endfor %}
@@ -97,9 +110,7 @@
 		</table>
 	</div>
 	{% endfor %}
+	</div>
+	{% endif %}
 </div>
-{% endif %}
-
-
-
 {% endblock %}

@@ -8,6 +8,15 @@ from itertools import groupby
 @app.route("/")
 def index():
 	stories = models.Story.query.all()
+	
+	# calculate the number of unique contributors to a story
+	for s in stories:
+		contributors = []
+		for r in s.rounds:
+			for c in r.contributions:
+				if c.author_id not in contributors:
+					contributors.append(c.author_id)
+		s.contributors = contributors
 
 	return render_template("home.html", stories=stories)
 

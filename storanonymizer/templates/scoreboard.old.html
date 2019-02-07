@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
+	<h4 class="storanonymizer__title-bar__title">Scoreboard</h4>
+	<div class="storanonymizer__title-bar__subtitle">from <a href="{{ url_for('story', story_code=story.code) }}"><span class="bold">{{ story.name }}</span></a></div>
+</div>
+
+<div class="storanonymizer__votes-wrapper mdl-grid">
+	<div class="storanonymizer__votes__result mdl-cell mdl-cell--6-col mdl-color--white">
+		<h4>Scoreboard</h4>
+		<hr>
+		<table class="mdl-data-table mdl-js-data-table">
+			<thead>
+				<tr>
+          <th class="mdl-data-table__cell--non-numeric">Author</th>
+          <th>Total</th>
+	  <th>Average</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for ranking_entry in ranking %}
+				<tr>
+          <td class="mdl-data-table__cell--non-numeric">{{ ranking_entry.author }}</td>
+					<td>{{ ranking_entry.score }}</td>
+					<td>{{ ranking_entry.avg }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

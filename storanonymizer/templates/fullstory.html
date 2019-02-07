@@ -1,21 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="storanonymizer__colored-background-bar mdl-color--primary"></div>
-
-<div class="storanonymizer__contribution-wrapper">
-	<div class="storanonymizer__contribution mdl-color--white mdl-shadow--4dp">
-		<div class="storanonymizer__contribution__title">
-			<a href="{{ url_for('story', story_code=story.code) }}"><span class="bold">{{ story.name }}</span></a>
-		</div>
-		<div class="storanonymizer__contribution__sub-title">Full ongoing story</div>
-		<hr>
-		<div class="storanonymizer__contribution__text">
-      {% for c in contributions %}
-        {% if c.round.public_votes %}
-          <p>{{ c.text | safe }}</p>
-        {% endif %}
-      {% endfor %}
+<div class="container">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb justify-content-center bg-white">
+			<li class="breadcrumb-item"><a href="{{ url_for('story', story_code=story.code) }}">{{ story.name }}</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Full story</li>
+		</ol>
+	</nav>
+	<div class="row justify-content-center mt-3">
+		<h1 class="font-weight-bold">{{ story.name }}</h1>
+	</div>
+	<div class="row justify-content-center">
+		<h6 class="text-muted">Full ongoing story</h6>
+	</div>
+	<div class="row justify-content-center mt-3">
+		<div class="col-12 col-lg-7">
+			{% for c in contributions %}
+			{% if c.round.public_votes %}
+			<h4>{{ c.round.name }}</h4>
+			<p style="font-size: 1.05rem;">{{ c.text | safe }}</p>
+			{% endif %}
+			{% endfor %}
 		</div>
 	</div>
 </div>

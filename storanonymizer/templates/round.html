@@ -1,10 +1,22 @@
 {% extends "base.html" %} 
 
 {% block content %}
-<div class="jumbotron bg-white">
+<div class="jumbotron bg-white mb-0">
 	<div class="container">
 		<h1 class="display-4">{{ round.name }}</h1>
 		<p class="lead">Round in the story <a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }} </a></p>
+		{% if round.public_contributions %}
+		<span class="badge badge-primary">published</span>
+		{% else %}
+		<span class="badge badge-secondary">open</span>
+		{% endif %}
+		{% if round.public_votes %}
+		<span class="badge badge-warning">voted</span>
+		{% endif %}
+		{% if round.voting %}
+		<span class="badge badge-secondary">voting</span>
+		{% endif %}
+		<br><br>
 		{% if current_user.is_authenticated and not round.voting and not userHasContributed %}
 		<a class="btn btn-outline-success" href="{{ url_for('new_contribution', round_code=round.code) }}">New</a>
 		{% endif %}
@@ -26,7 +38,12 @@
 		<div class="col-12 col-md-6 mb-4">
 			<div class="card shadow-sm">
 				<div class="card-body">
-					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('contribution', contribution_code=c.code) }}">{{ c.code }}</a></h5>
+					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('contribution', contribution_code=c.code) }}">
+						{{ c.code }}</a>
+						{% if round.public_votes and c.id == round.winning_contribution_id|int %}
+						<span class="badge badge-success">Winner</span>
+						{% endif %}
+					</h5>
 					{% if c.author.id == current_user.id %}
 					<h6 class="card-subtitle mb-2 text-muted">written by me</h6>
 					{% else %}
@@ -34,7 +51,7 @@
 					<h6 class="card-subtitle mb-2 text-muted">written by <span class="font-weight-bold">{{ c.author.name }}</span></h6>
 					{% endif %}
 					{% endif %}
-					<p class="card-text">{{ c.text|truncate|safe }}</p>
+					<p class="card-text" style="font-size: 0.9rem;">{{ c.text|truncate|safe }}</p>
 					<a href="{{ url_for('contribution', contribution_code=c.code) }}" class="card-link">Read</a>
 				</div>
 			</div>
@@ -42,14 +59,14 @@
 		{% endfor %}
 	</div>
 	{% else %}
-	<h6 class="font-italic">No contributions submitted!</h6>
+	<h6 class="alert alert-light text-center">No contributions submitted</h6>
 	{% endif %}
 	
 	{% else %}
 	{% if round.contributions|length > 0 %}
-	<h6 class="font-italic"><span class="font-weight-bold">{{ round.contributions|length }}</span> contributions submitted!</h6>
+	<h6 class="alert alert-light text-center"><span class="font-weight-bold">{{ round.contributions|length }}</span> {% if round.contributions|length > 1 %}contributions{% else %}contribution{% endif %} submitted</h6>
 	{% else %}
-	<h6 class="font-italic">No contributions submitted yet!</h6>
+	<h6 class="alert alert-light text-center">No contributions submitted yet</h6>
 	{% endif %}
 	
 	{% endif %}

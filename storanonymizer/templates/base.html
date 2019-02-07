@@ -8,7 +8,7 @@
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-		<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+		<!--link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"-->
 		
 		{% if title %}
 		<title>{{ title }}</title>
@@ -32,7 +32,7 @@
 				</div>
 				{% else %}
 				<div>
-					<a class="btn btn-outline-dark" href="{{ url_for('register') }}">Register</a>
+					<a class="btn btn-outline-dark" href="{{ url_for('register') }}">Sign up</a>
 					<a class="btn btn-primary" href="{{ url_for('login') }}">Login</a>
 				</div>
 				{% endif %}
