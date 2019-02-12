@@ -18,12 +18,12 @@
 		{% endif %}
 		<br><br>
 		{% if current_user.is_authenticated and not round.voting and not userHasContributed %}
-		<a class="btn btn-outline-success" href="{{ url_for('new_contribution', round_code=round.code) }}">New</a>
+		<a class="btn btn-success" href="{{ url_for('new_contribution', round_code=round.code) }}">New</a>
 		{% endif %}
 		{% if round.voting or round.public_votes %}
 		<a class="btn btn-light" href="{{ url_for('votes', round_code=round.code) }}">Votes</a>
 		{% endif %}
-		<a class="btn btn-light" href="#">Statistics</a>
+		<a class="btn btn-light" href="{{ url_for('round_statistics', round_code=round.code) }}">Statistics</a>
 		{% if current_user.id == round.story.user.id %}
 		<a class="btn btn-light" href="{{ url_for('round_settings', round_code=round.code) }}">Settings</a>
 		{% endif %}

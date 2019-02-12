@@ -1,32 +1,30 @@
 {% extends "base-auth.html" %}
 
 {% block content %}
-
-	<form class="storanonymizer__auth-field mdl-color--white mdl-shadow--8dp" action="login" method="post">
-		<h4><a href="{{ url_for('index') }}"><!--i class="material-icons">arrow_back</i--><span class="bold">Storanonymizer</span></a> Login</h4>
-
-		{% with messages = get_flashed_messages() %}
-		{% if messages %}
-			<div class="auth__error mdl-cell mdl-cell--12-col mdl-shadow--4dp mdl-color--red">
-			{% for m in messages %}
-				<h6 class="mdl-color-text--white">
-					{{ m }}
-				</h6>
-			{% endfor %}
-			</div>
-		{% endif %}
-		{% endwith %}
-
-		<div class="mdl-textfield mdl-js-textfield">
-			<input class="mdl-textfield__input" type="text" name="name" id="name">
-			<label class="mdl-textfield__label" for="name">Name</label>
+<div class="container-fluid bg-light">
+	<div class="col-12 col-md-6 col-lg-4 col-xl-3 pt-5 pb-5">
+		<a href="{{ url_for('index') }}"><h5 class="text-muted text-center">Storanonymizer</h5></a>
+		<div class="card">
+		<div class="card-body">
+			<h4 class="card-title">Login</h4>
+			{% if get_flashed_messages() %}
+			<p class="card-text text-secondary"><span class="text-danger">Oh dear, it seems like you do not even recall yourself correctly.</span> Please have another try at authenticating yourself.</p>
+			{% else %}
+			<p class="card-text text-secondary">Please kindly remind us who you were again exactly. Not that we do not remember, but ehh, just in case.</p>
+			{% endif %}
+			<form action="login" method="post">
+				<div class="form-group">
+					<input type="text" class="form-control" name="name" placeholder="Name">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control" name="password" placeholder="Password">
+				</div>
+				<div class="form-group text-center">
+					<input type="submit" value="Login" class="btn btn-outline-primary">
+				</div>
+			</form>
 		</div>
-		<div class="mdl-textfield mdl-js-textfield">
-			<input class="mdl-textfield__input" type="password" name="password" id="password">
-			<label class="mdl-textfield__label" for="password">Password</label>
 		</div>
-		<input type="submit" value="Login" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
-
-	</form>
-
+	</div>
+</div>
 {% endblock %}

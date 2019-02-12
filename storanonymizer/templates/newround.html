@@ -1,33 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="storanonymizer__about-story mdl-grid mdl-color--primary">
-	<h4 class="mdl-cell mdl-cell--2-col">
-		New Round
-	</h4>
-	<div class="mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet">
-    In a round every participant submits their contribution. We shuffle those contributions and publish them anonymously for voting. After that the results can be published.
- 	</div>
+<div class="jumbotron bg-white mb-0">
+	<div class="container">
+		<h1>New round</h1>
+		<p class="lead"><a href="{{ url_for('story', story_code=story.code) }}">{{ story.name }}</a></p>
+	</div>
 </div>
 
-<form class="storanonymizer__new-story-form mdl-shadow--4dp" action="round" method="post">
-	{% with messages = get_flashed_messages() %}
-		{% if messages %}
-			<div class="storanonymizer__error mdl-cell mdl-cell--4-col mdl-shadow--4dp mdl-color--red">
-			{% for m in messages %}
-				<h6 class="mdl-color-text--white">
-					{{ m }}
-				</h6>
-			{% endfor %}
-			</div>
-		{% endif %}
-	{% endwith %}
-	<div class="mdl-textfield mdl-js-textfield">
-		<input class="mdl-textfield__input" type="text" name="name" id="round-name">
-		<label class="mdl-textfield__label" for="round-name">Round title</label>
+<div  class="container">
+	{% for m in get_flashed_messages() %}
+	<div class="row justify-content-center">
+		<div class="alert alert-danger">{{ m }}</div>
 	</div>
-	<input type="submit" value="Create Round" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
-</form>
-
+	{% endfor %}
+	<div class="row">
+		<form action="round" class="col-12" method="post">
+			<div class="row justify-content-center">
+				<div class="form-group">
+					<input type="text" class="form-control" name="name" placeholder="Title">
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="form-group">
+					<input type="submit" class="btn btn-success" value="Create round">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 {% endblock %}

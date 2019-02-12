@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="storanonymizer__creation-bar mdl-color--primary mdl-color-text--white">
+	<h4 class="storanonymizer__title-bar__title">My Stories</h4>
+	<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{{ url_for('new_story') }}"><i class="material-icons">add</i> Story</a>
+</div>
+
+<div class="storanonymizer__story-list mdl-grid">
+{% for s in stories %}
+	<div class="storanonymizer__story-list-item mdl-card mdl-cell--4-col mdl-shadow--4dp">
+		<div class="storanonymizer__story-list-item__title mdl-card__title"><h2 class="mdl-card__title-text">{{ s.name }}</h2></div>
+		<div class="mdl-card__actions mdl-card--border">
+			<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url_for('story', story_code=s.code) }}">Visit</a>
+		</div>
+	</div>
+{% else %}
+	<h6>No stories yet! Try adding one</h6>
+{% endfor %}
+</div>
+
+{% endblock %}

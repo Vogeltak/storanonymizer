@@ -1,42 +1,17 @@
 {% extends "base-auth.html" %}
 
-{% block styles %}
-<style>
-  .page-content {
-    background: #f44336;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
-
-	<div class="mdl-card mdl-color--white mdl-shadow--8dp">
-		{% with messages = get_flashed_messages() %}
-		{% if messages %}
-			<div class="auth__error mdl-cell mdl-cell--12-col mdl-shadow--4dp mdl-color--red">
-			{% for m in messages %}
-				<h6 class="mdl-color-text--white">
-					{{ m }}
-				</h6>
-			{% endfor %}
-			</div>
-		{% endif %}
-		{% endwith %}
-
-    <div class="mdl-card__title mdl-card--expand">
-      <h2 class="mdl-card__title-text">Delete</h2>
-    </div>
-    <div class="mdl-card__supporting-text">
-      Are you sure you want to delete the story <a href="{{ url_for('story', story_code=story.code) }}" class="storanonymizer__link">{{ story.name }}</a> permanently? It will be impossible to recover.
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-      <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red" href="{{ url_for('delete_story', story_code=story.code) }}">
-        Delete
-      </a>
-      <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-600 mdl-color-text--white" href="{{ url_for('story', story_code=story.code) }}">
-        Cancel
-      </a>
-    </div>
+<div class="container-fluid bg-light">
+	<div class="col-12 col-md-6 col-lg-4 col-xl-3 pt-5 pb-5">
+		<a href="{{ url_for('index') }}"><h5 class="text-muted text-center">Storanonymizer</h5></a>
+		<div class="card">
+		<div class="card-body">
+			<h4 class="card-title">Delete</h4>
+			<p class="card-text">Are you sure you want to delete <a href="{{ url_for('story', story_code=story.code) }}">{{ story.name }}</a> permanently? It will be impossible to recover.</p>
+			<a class="card-link btn btn-outline-danger" href="{{ url_for('delete_story', story_code=story.code) }}">Delete</a>
+			<a class="card-link btn btn-secondary" href="{{ url_for('story', story_code=story.code) }}">Cancel</a>
+		</div>
+		</div>
 	</div>
-
+</div>
 {% endblock %}

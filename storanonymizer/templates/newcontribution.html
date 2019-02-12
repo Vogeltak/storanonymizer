@@ -1,15 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<form action="contribution" method="post" class="storanonymizer__contribution-form mdl-grid">
-	<div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--6-col">
-		<textarea class="mdl-textfield__input" type="text" name="text" id="new-contribution"></textarea>
-		<label class="mdl-textfield__label" for="new-contribution">Write your contribution here..</label>
+<div class="jumbotron bg-white mb-0">
+	<div class="container">
+		<h1>New contribution</h1>
+		<p class="lead"><a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }}</a> / <a href="{{ url_for('round', round_code=round.code) }}">{{ round.name }}</a></p>
 	</div>
-	<div class="mdl-cell mdl-cell--4-col">
-		<input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" value="Submit">
-	</div>
-</form>
+</div>
 
+<div  class="container">
+	<div class="row">
+		<form action="contribution" class="col-12" method="post">
+			<div class="row">
+				<div class="form-group col-12 col-lg-8">
+					<textarea class="form-control" name="text" placeholder="Make sure to eventually put your contribution here.." style="height: 40vh;"></textarea>
+				</div>
+				<div class="form-group col-12 col-lg-4">
+					<input type="submit" class="btn btn-success" value="Submit">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 {% endblock %}

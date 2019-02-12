@@ -67,6 +67,12 @@ def register():
 			flash("Passwords do not match")
 			return redirect(url_for("register"))
 
+		# Perform a uniqueness check on the username
+		user = models.User.query.filter_by(name=name).first()
+		if user is not None:
+			flash("This user already exists")
+			return redirect(url_for("register"))
+
 		auth.register(name, pwd)
 		auth.login(name, pwd)
 
@@ -104,6 +110,15 @@ def new_story():
 @login_required
 def my_stories():
 	stories = current_user.stories
+	
+	# calculate the number of unique contributors to a story
+	for s in stories:
+		contributors = []
+		for r in s.rounds:
+			for c in r.contributions:
+				if c.author_id not in contributors:
+					contributors.append(c.author_id)
+		s.contributors = contributors
 
 	return render_template("mystories.html", stories=stories)
 
@@ -189,6 +204,17 @@ def round(round_code):
 
 	return render_template("round.html", round=round, contributions=contributions, userHasContributed=userHasContributed)
 
+@app.route("/story/<story_code>/settings")
+@login_required
+def story_settings(story_code):
+	story = models.Story.query.filter_by(code=story_code).first()
+
+	if current_user.id is not story.user.id:
+		flash("You're not authorized to access the settings page!")
+		return redirect("/story/{}".format(story.code))
+
+	return render_template("storysettings.html", story=story)
+
 @app.route("/story/<story_code>/new/round", methods=["GET", "POST"])
 @login_required
 def new_round(story_code):
@@ -199,7 +225,7 @@ def new_round(story_code):
 
 		if name == "":
 			flash("Not all fields were filled in")
-			return redirect(url_for("new_round"))
+			return redirect(url_for("new_round", story_code=story.code))
 		else:
 			code = ""
 
@@ -215,7 +241,13 @@ def new_round(story_code):
 
 			return redirect(url_for("round", round_code=round.code))
 
-	return render_template("newround.html")
+	return render_template("newround.html", story=story)
+
+@app.route("/round/<round_code>/statistics")
+def round_statistics(round_code):
+	round = models.Round.query.filter_by(code=round_code).first()
+	
+	return render_template("roundstatistics.html", round=round)
 
 @app.route("/round/<round_code>/settings")
 @login_required

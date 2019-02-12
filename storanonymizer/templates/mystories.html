@@ -1,23 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="storanonymizer__creation-bar mdl-color--primary mdl-color-text--white">
-	<h4 class="storanonymizer__title-bar__title">My Stories</h4>
-	<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{{ url_for('new_story') }}"><i class="material-icons">add</i> Story</a>
+<div class="jumbotron bg-white mb-0">
+	<div class="container">
+		<h1>Your stories</h1>
+	</div>
 </div>
 
-<div class="storanonymizer__story-list mdl-grid">
-{% for s in stories %}
-	<div class="storanonymizer__story-list-item mdl-card mdl-cell--4-col mdl-shadow--4dp">
-		<div class="storanonymizer__story-list-item__title mdl-card__title"><h2 class="mdl-card__title-text">{{ s.name }}</h2></div>
-		<div class="mdl-card__actions mdl-card--border">
-			<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url_for('story', story_code=s.code) }}">Visit</a>
+<div class="container">
+	<div class="row">
+		{% for s in stories %}
+		<div class="col-12 col-md-6 mb-4">
+			<div class="card">
+				<a href="{{ url_for('story', story_code=s.code) }}"><img class="card-img-top" src="{{ url_for('static', filename=s.name + '.jpeg') }}"></a>
+				<div class="card-body">
+					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('story', story_code=s.code) }}">{{ s.name }}</a></h5>
+					<p class="card-text"><span class="badge badge-dark">{{ s.rounds|length }} rounds</span> <span class="badge badge-primary">{{ s.contributors|length }} participants</span></p>
+					<a href="{{ url_for('story', story_code=s.code) }}" class="card-link">View</a>
+				</div>
+			</div>
 		</div>
+		{% else %}
+		<h6>You have started no stories yet!</h6>
+		{% endfor %}
 	</div>
-{% else %}
-	<h6>No stories yet! Try adding one</h6>
-{% endfor %}
 </div>
 
 {% endblock %}

@@ -1,105 +1,101 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="storanonymizer__title-bar mdl-color--primary mdl-color-text--white">
-	<h4 class="storanonymizer__title-bar__title">Round settings</h4>
+<div class="jumbotron bg-white mb-0">
+	<div class="container">
+		<h1>Round settings</h1>
+		<p class="lead"><a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }}</a> / <a href="{{ url_for('round', round_code=round.code) }}">{{ round.name }}</a></p>
+	</div>
 </div>
 
-<div class="storanonymizer__sub-bar">
-	<a href="{{ url_for('round', round_code=round.code) }}">
-		<h5><i class="material-icons">arrow_back</i> {{ round.name }}</h5>
-	</a>
+<div class="container">
+	<div class="row justify-content-center">
+		<!-- 1. public contributions -->
+		<div class="col-12 col-lg-6 card mb-3">
+			<div class="card-body">
+				<h5 class="custom-control custom-switch card-title">
+					<input type="checkbox" class="custom-control-input" id="public-contributions-switch" {% if round.public_contributions %}checked{% endif %}>
+					<label class="custom-control-label" for="public-contributions-switch">Public Contributions</label>
+				</h5>
+				<p class="card-text">Publishes all contributions submitted to {{ round.name }} such that they can be read by anyone accessing the website.</p>
+				
+			</div>
+		</div>
+	</div>
+	<div class="row justify-content-center">
+		<!-- 2. public authors -->
+		<div class="col-12 col-lg-6 card mb-3">
+			<div class="card-body">
+				<h5 class="custom-control custom-switch card-title">
+					<input type="checkbox" class="custom-control-input" id="public-authors-switch" {% if round.public_authors %}checked{% endif %}>
+					<label class="custom-control-label" for="public-authors-switch">Public Authors</label>
+				</h5>
+				<p class="card-text">Publishes the name of the author alongside all contributions submitted to {{ round.name }}.</p>
+			</div>
+		</div>
+	</div>
+	<div class="row justify-content-center">
+		<!-- 3. voting -->
+		<div class="col-12 col-lg-6 card mb-3">
+			<div class="card-body">
+				<h5 class="custom-control custom-switch card-title">
+					<input type="checkbox" class="custom-control-input" id="voting-switch" {% if round.voting %}checked{% endif %}>
+					<label class="custom-control-label" for="voting-switch">Voting</label>
+				</h5>
+				<p class="card-text">Enables the possibility for authenticated users to vote on contributions submitted to {{ round.name }}.</p>
+			</div>
+		</div>
+	</div>
+	<div class="row justify-content-center">
+		<!-- 4. public votes -->
+		<div class="col-12 col-lg-6 card mb-4">
+			<div class="card-body">
+				<h5 class="custom-control custom-switch card-title">
+					<input type="checkbox" class="custom-control-input" id="public-votes-switch" {% if round.public_votes %}checked{% endif %}>
+					<label class="custom-control-label" for="public-votes-switch">Public Votes</label>
+				</h5>
+				<p class="card-text">Publishes all cast votes and the total score of all contributions in {{ round.name }}.</p>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row justify-content-center">
+		<div class="col-12 col-lg-4 card mb-4">
+			<div class="card-body">
+				<p class="card-text">Remove <span class="font-italic">{{ round.name }}</span> from the story <span class="font-italic">{{ round.story.name }}</span>. Beware that this can not be undone!</p>
+				<a href="{{ url_for('delete_round', round_code=round.code) }}" class="card-link btn btn-danger">Delete</a>
+			</div>
+		</div>
+	</div>
 </div>
-
-<div class="storanonymizer__settings-group mdl-grid">
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<h6><span class="bold">Contributions:</span> {{ round.contributions|length }}</h6>
-		<ul class="storanonymizer__name-list">
-		{% for c in round.contributions|sort(attribute='author.name') %}
-			<li>
-			{{ c.author.name }}
-			</li>
-		{% endfor %}
-		</ul>
-	</div>
-{% if round.votes %}
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<h6><span class="bold">Votes:</span> {{ round.votes|groupby('user.name')|length }}</h6>
-		<ul class="storanonymizer__name-list">
-		{% for group in round.votes|groupby('user.name') %}
-			<li>
-			{{ group.grouper }} - {{ group.list|length}}/5
-			</li>
-		{% endfor %}
-		</ul>
-	</div>
-{% endif %}
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-contributions-switch">
-			<input type="checkbox" id="public-contributions-switch" class="mdl-switch__input" {% if round.public_contributions %}checked{% endif %}>
-  			<span class="mdl-switch__label">Publish Contributions</span>
-		</label>
-		<hr>
-		<p>When Publish Contributions is set to true, everyone visiting the round page will be able to view all contributions submitted to that round.</p>
-	</div>
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-authors-switch">
-			<input type="checkbox" id="public-authors-switch" class="mdl-switch__input" {% if round.public_authors %}checked{% endif %}>
-  			<span class="mdl-switch__label">Public Authors</span>
-		</label>
-		<hr>
-		<p>When Public Authors is set to true, the name of an author of a contribution gets published alongside the contribution.</p>
-	</div>
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="voting-switch">
-			<input type="checkbox" id="voting-switch" class="mdl-switch__input" {% if round.voting %}checked{% endif %}>
-  			<span class="mdl-switch__label">Voting</span>
-		</label>
-		<hr>
-		<p>When voting is enabled, every user is able to give points to their favorite contributions of a round.</p>
-	</div>
-	<div class="storanonymizer__settings-item mdl-cell mdl-cell--4-col mdl-cell--5-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="public-votes-switch">
-			<input type="checkbox" id="public-votes-switch" class="mdl-switch__input" {% if round.public_votes %}checked{% endif %}>
-  			<span class="mdl-switch__label">Public Votes</span>
-		</label>
-		<hr>
-		<p>When Public Votes is set to true, voting is disabled and everyone is able to see an overview of all awarded points.</p>
-	</div>
-	<a href="delete" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red mdl-color-text--white">Delete round</a>
-</div>
-
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript">
 
-	<script type="text/javascript">
+	document.querySelector('#public-authors-switch').addEventListener('change', function() {
+		var req = new XMLHttpRequest();
+		req.open('GET', 'toggle/publicauthors', true);
+		req.send();
+	});
 
-		document.querySelector('#public-authors-switch').addEventListener('change', function() {
-			var req = new XMLHttpRequest();
-			req.open('GET', 'toggle/publicauthors', true);
-			req.send();
-		});
+	document.querySelector('#public-contributions-switch').addEventListener('change', function() {
+		var req = new XMLHttpRequest();
+		req.open('GET', 'toggle/publiccontributions', true);
+		req.send();
+	});
 
-		document.querySelector('#public-contributions-switch').addEventListener('change', function() {
-			var req = new XMLHttpRequest();
-			req.open('GET', 'toggle/publiccontributions', true);
-			req.send();
-		});
+	document.querySelector('#voting-switch').addEventListener('change', function() {
+		var req = new XMLHttpRequest();
+		req.open('GET', 'toggle/voting', true);
+		req.send();
+	});
 
-		document.querySelector('#voting-switch').addEventListener('change', function() {
-			var req = new XMLHttpRequest();
-			req.open('GET', 'toggle/voting', true);
-			req.send();
-		});
+	document.querySelector('#public-votes-switch').addEventListener('change', function() {
+		var req = new XMLHttpRequest();
+		req.open('GET', 'toggle/publicvotes', true);
+		req.send();
+	});
 
-		document.querySelector('#public-votes-switch').addEventListener('change', function() {
-			var req = new XMLHttpRequest();
-			req.open('GET', 'toggle/publicvotes', true);
-			req.send();
-		});
-
-	</script>
-
+</script>
 {% endblock %}

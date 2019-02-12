@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron bg-white mb-0">
+	<div class="container">
+		<h1>Story settings</h1>
+		<p class="lead"><a href="{{ url_for('story', story_code=story.code) }}">{{ story.name }}</a></p>
+		<a href="{{ url_for('new_round', story_code=story.code) }}" class="btn btn-success">New round</a>
+		<a href="{{ url_for('prompt_delete_story', story_code=story.code) }}" class="btn btn-outline-danger">Delete</a>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+
+	document.querySelector('#public-authors-switch').addEventListener('change', function() {
+		var req = new XMLHttpRequest();
+		req.open('GET', 'toggle/publicauthors', true);
+		req.send();
+	});
+
+	document.querySelector('#public-contributions-switch').addEventListener('change', function() {
+		var req = new XMLHttpRequest();
+		req.open('GET', 'toggle/publiccontributions', true);
+		req.send();
+	});
+
+	document.querySelector('#voting-switch').addEventListener('change', function() {
+		var req = new XMLHttpRequest();
+		req.open('GET', 'toggle/voting', true);
+		req.send();
+	});
+
+	document.querySelector('#public-votes-switch').addEventListener('change', function() {
+		var req = new XMLHttpRequest();
+		req.open('GET', 'toggle/publicvotes', true);
+		req.send();
+	});
+
+</script>
+{% endblock %}

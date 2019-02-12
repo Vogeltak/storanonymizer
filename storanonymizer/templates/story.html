@@ -9,7 +9,7 @@
 		{% if current_user.id == story.user.id %}
 		<!--a class="btn btn-outline-success" href="{{ url_for('new_round', story_code=story.code) }}">New</a>
 		<a class="btn btn-outline-danger" href="{{ url_for('prompt_delete_story', story_code=story.code) }}">Delete</a-->
-		<a class="btn btn-light" href="#">Settings</a>
+		<a class="btn btn-light" href="{{ url_for('story_settings', story_code=story.code) }}">Settings</a>
 		{% endif %}
 	</div>
 </div>

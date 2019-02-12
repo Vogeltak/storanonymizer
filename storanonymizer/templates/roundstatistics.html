@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron bg-white mb-0">
+	<div class="container">
+		<h1>Statistics</h1>
+		<p class="lead"><a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }}</a> / <a href="{{ url_for('round', round_code=round.code) }}">{{ round.name }}</a></p>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-12 col-md-6 col-lg-5 card mb-3">
+			<div class="card-body">
+				<h5 class="card-title">{{ round.contributions|length }} contributors</h5>
+				<table class="card-text table table-sm">
+					<tbody>
+						{% for c in round.contributions|sort(attribute='author.name') %}
+						<tr><td>{{ c.author.name }}</td></tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<!--ul class="card-text" id="contributors">
+					{% for c in round.contributions|sort(attribute='author.name') %}
+					<li>{{ c.author.name }}</li>
+					{% endfor %}
+				</ul-->
+			</div>
+		</div>
+		
+		<div class="col-12 col-md-6 col-lg-5 offset-lg-2 card mb-3">
+			<div class="card-body">
+				<h5 class="card-title">{{ round.votes|groupby('user.name')|length }} voters</h5>
+				<table class="card-text table table-sm">
+					<tbody>
+						{% for group in round.votes|groupby('user.name') %}
+						<tr>
+							<td>{{ group.grouper }}</td>
+							<td><span class="badge badge-pill 
+							{% if group.list|length == 5 %}badge-primary
+							{% else %}badge-secondary{% endif %}">{{ group.list|length}}/5</span></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
