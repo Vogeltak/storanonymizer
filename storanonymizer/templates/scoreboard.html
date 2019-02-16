@@ -25,7 +25,7 @@
 						<tr>
 							<td>{{ entry.author }}</td>
 							<td>{{ entry.score }}</td>
-							<td>{{ entry.avg }}</td>
+							<td>{{ '%0.2f'|format(entry.avg|float) }}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
