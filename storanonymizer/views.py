@@ -80,6 +80,23 @@ def register():
 
 	return render_template("register.html")
 
+# One should add POST method to make this work
+@app.route("/reset/bob", methods=["GET"])
+def reset():
+	if request.method == "POST":
+		pwd = request.form["password"]
+		pwd_check = request.form["password_check"]
+
+		if pwd != pwd_check:
+			flash("Passwords do not match")
+			return redirect(url_for("reset"))
+
+		auth.reset_password(14, pwd)
+		
+		return redirect(url_for("login"))
+
+	return render_template("reset.html")
+
 @app.route("/new/story", methods=["GET", "POST"])
 @login_required
 def new_story():
@@ -325,6 +342,10 @@ def contribution(contribution_code):
 @app.route("/contribution/<contribution_code>/delete")
 def delete_contribution(contribution_code):
 	contribution = models.Contribution.query.filter_by(code=contribution_code).first()
+
+	if contribution.round.public_contributions:
+		flash("You are not allowed to remove this contribution")
+		return redirect(url_for("my_contributions"))
 
 	if current_user.id == contribution.author.id:
 		for v in contribution.votes:

@@ -24,3 +24,8 @@ def register(name, pwd):
 
 	db.session.add(user)
 	db.session.commit()
+
+def reset_password(id, pwd):
+	user = load_user(id)
+	user.password_hash = bcrypt.generate_password_hash(pwd)
+	db.session.commit()

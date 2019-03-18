@@ -1,0 +1,30 @@
+{% extends "base-auth.html" %}
+
+{% block content %}
+<div class="container-fluid bg-light">
+	<div class="col-12 col-md-6 col-lg-4 col-xl-3 pt-5 pb-5">
+		<a href="{{ url_for('index') }}"><h5 class="text-muted text-center">Storanonymizer</h5></a>
+		<div class="card">
+		<div class="card-body">
+			<h4 class="card-title">Wachtwoordreset</h4>
+			{% for m in get_flashed_messages() %}
+			<p class="card-text text-danger">{{ m }}</p>
+			{% else %}
+			<p class="card-text text-secondary">Bob, jij dummie. Doe iets beter je best met dit wachtwoord.</p>
+			{% endfor %}
+			<form action="bob" method="post">
+				<div class="form-group">
+					<input type="password" class="form-control" name="password" placeholder="Password">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control" name="password_check" placeholder="Password again">
+				</div>
+				<div class="form-group text-center">
+					<input type="submit" value="Reset" class="btn btn-outline-primary">
+				</div>
+			</form>
+		</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
