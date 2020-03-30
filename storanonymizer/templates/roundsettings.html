@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron bg-white mb-0">
+<div class="jumbotron bg-light">
 	<div class="container">
 		<h1>Round settings</h1>
 		<p class="lead"><a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }}</a> / <a href="{{ url_for('round', round_code=round.code) }}">{{ round.name }}</a></p>
@@ -18,7 +18,7 @@
 					<label class="custom-control-label" for="public-contributions-switch">Public Contributions</label>
 				</h5>
 				<p class="card-text">Publishes all contributions submitted to {{ round.name }} such that they can be read by anyone accessing the website.</p>
-				
+
 			</div>
 		</div>
 	</div>
@@ -58,7 +58,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="row justify-content-center">
 		<div class="col-12 col-lg-4 card mb-4">
 			<div class="card-body">

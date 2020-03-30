@@ -1,7 +1,7 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron bg-white mb-0">
+<div class="jumbotron bg-light">
 	<div class="container">
 		<h1 class="display-4">{{ round.name }}</h1>
 		<p class="lead">Round in the story <a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }} </a></p>
@@ -21,11 +21,11 @@
 		<a class="btn btn-success" href="{{ url_for('new_contribution', round_code=round.code) }}">New</a>
 		{% endif %}
 		{% if round.voting or round.public_votes %}
-		<a class="btn btn-light" href="{{ url_for('votes', round_code=round.code) }}">Votes</a>
+		<a class="btn btn-outline-secondary" href="{{ url_for('votes', round_code=round.code) }}">Votes</a>
 		{% endif %}
-		<a class="btn btn-light" href="{{ url_for('round_statistics', round_code=round.code) }}">Statistics</a>
+		<a class="btn btn-outline-secondary" href="{{ url_for('round_statistics', round_code=round.code) }}">Statistics</a>
 		{% if current_user.id == round.story.user.id %}
-		<a class="btn btn-light" href="{{ url_for('round_settings', round_code=round.code) }}">Settings</a>
+		<a class="btn btn-outline-secondary" href="{{ url_for('round_settings', round_code=round.code) }}">Settings</a>
 		{% endif %}
 	</div>
 </div>
@@ -35,7 +35,7 @@
 	{% if round.contributions|length > 0 %}
 	<div class="row">
 		{% for c in contributions %}
-		<div class="col-12 col-md-6 mb-4">
+		<div class="col-12 col-md-6 col-lg-4 mb-4">
 			<div class="card shadow-sm">
 				<div class="card-body">
 					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('contribution', contribution_code=c.code) }}">
@@ -61,14 +61,14 @@
 	{% else %}
 	<h6 class="alert alert-light text-center">No contributions submitted</h6>
 	{% endif %}
-	
+
 	{% else %}
 	{% if round.contributions|length > 0 %}
 	<h6 class="alert alert-light text-center"><span class="font-weight-bold">{{ round.contributions|length }}</span> {% if round.contributions|length > 1 %}contributions{% else %}contribution{% endif %} submitted</h6>
 	{% else %}
 	<h6 class="alert alert-light text-center">No contributions submitted yet</h6>
 	{% endif %}
-	
+
 	{% endif %}
 </div>
 {% endblock %}

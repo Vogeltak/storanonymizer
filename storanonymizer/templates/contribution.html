@@ -1,46 +1,58 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if contribution.round.public_contributions or contribution.author.id == current_user.id %}
+<div class="jumbotron bg-light">
+	<div class="container">
+    	<nav aria-label="breadcrumb">
+    		<ol class="breadcrumb justify-content-center bg-light">
+    			<li class="breadcrumb-item"><a href="{{ url_for('story', story_code=contribution.round.story.code) }}">{{ contribution.round.story.name }}</a></li>
+    			<li class="breadcrumb-item"><a href="{{ url_for('round', round_code=contribution.round.code) }}">{{ contribution.round.name }}</a></li>
+    			<li class="breadcrumb-item active" aria-current="page">{{ contribution.code }}</li>
+    		</ol>
+    	</nav>
+    	<div class="row justify-content-center mt-3">
+    		<h1 class="font-weight-bold">{{ contribution.code }}</h1>
+    	</div>
+    	{% if contribution.round.public_authors or contribution.author.id == current_user.id %}
+    	<div class="row justify-content-center">
+    		<h6 class="text-muted">Written by {{ contribution.author.name }}</h6>
+    	</div>
+    	{% endif %}
+    	{% if contribution.round.voting and current_user.is_authenticated and contribution.author.id != current_user.id %}
+    	<div class="row justify-content-center">
+    		<div class="col-3 col-md-2 col-lg-1">
+    		  <select class="vote-select custom-select badge badge-light font-weight-normal" id="point-selector">
+    			<option value="5" {% if user_vote == 5 %}selected{% endif %}>5</option>
+    			<option value="4" {% if user_vote == 4 %}selected{% endif %}>4</option>
+    			<option value="3" {% if user_vote == 3 %}selected{% endif %}>3</option>
+    			<option value="2" {% if user_vote == 2 %}selected{% endif %}>2</option>
+    			<option value="1" {% if user_vote == 1 %}selected{% endif %}>1</option>
+    			<option value="0" {% if user_vote is none %}selected{% endif %}>0</option>
+    		  </select>
+    		</div>
+    	</div>
+    	{% endif %}
+	</div>
+</div>
+
 <div class="container">
-	{% if contribution.round.public_contributions or contribution.author.id == current_user.id %}
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb justify-content-center bg-white">
-			<li class="breadcrumb-item"><a href="{{ url_for('story', story_code=contribution.round.story.code) }}">{{ contribution.round.story.name }}</a></li>
-			<li class="breadcrumb-item"><a href="{{ url_for('round', round_code=contribution.round.code) }}">{{ contribution.round.name }}</a></li>
-			<li class="breadcrumb-item active" aria-current="page">{{ contribution.code }}</li>
-		</ol>
-	</nav>
-	<div class="row justify-content-center mt-3">
-		<h1 class="font-weight-bold">{{ contribution.code }}</h1>
-	</div>
-	{% if contribution.round.public_authors or contribution.author.id == current_user.id %}
-	<div class="row justify-content-center">
-		<h6 class="text-muted">Written by {{ contribution.author.name }}</h6>
-	</div>
-	{% endif %}
-	{% if contribution.round.voting and current_user.is_authenticated and contribution.author.id != current_user.id %}
-	<div class="row justify-content-center">
-		<div class="col-3 col-md-2 col-lg-1">
-		  <select class="vote-select custom-select badge badge-light font-weight-normal" id="point-selector">
-			<option value="5" {% if user_vote == 5 %}selected{% endif %}>5</option>
-			<option value="4" {% if user_vote == 4 %}selected{% endif %}>4</option>
-			<option value="3" {% if user_vote == 3 %}selected{% endif %}>3</option>
-			<option value="2" {% if user_vote == 2 %}selected{% endif %}>2</option>
-			<option value="1" {% if user_vote == 1 %}selected{% endif %}>1</option>
-			<option value="0" {% if user_vote is none %}selected{% endif %}>0</option>
-		  </select>
-		</div>
-	</div>
-	{% endif %}
 	<div class="row justify-content-center mt-3">
 		<div class="col-12 col-lg-7">
 			<p style="font-size: 1.05rem;">{{ contribution.text | safe }}</p>
 		</div>
 	</div>
-	{% else %}
-	<h6>You are not supposed to look here!</h6>
-	{% endif %}
 </div>
+{% else %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <h5>You are not supposed to look here!</h5>
+    </div>
+    <div class="row justify-content-center mt-3">
+        <a href="{{ url_for('round', round_code=contribution.round.code) }}">Go back to Round</a>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block scripts %}
