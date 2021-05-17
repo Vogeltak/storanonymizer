@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron bg-light">
+<div class="jumbotron bg-white">
 	<div class="container">
 		<h1 class="display-4">{{ round.name }}</h1>
 		<p class="lead">Round in the story <a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }} </a></p>
@@ -42,6 +42,7 @@
 						{{ c.code }}</a>
 						{% if round.public_votes and c.id == round.winning_contribution_id|int %}
 						<span class="badge badge-success">Winner</span>
+						<span class="badge badge-secondary">{{ chance }}%</span>
 						{% endif %}
 					</h5>
 					{% if c.author.id == current_user.id %}

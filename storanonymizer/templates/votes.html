@@ -15,6 +15,13 @@
 </div>
 
 <div class="container">
+	{% for c in ranking %}
+	{% if c.id == round.winning_contribution_id|int %}
+	<div class="row">
+		<p class="col-12">{{ c.author.name }} has won this round! Congratulations! They had a {{ chance }}% chance of winning based on the vote distribution.</p>
+	</div>
+	{% endif %}
+	{% endfor %}
 	<div class="row">
 		<!-- First: results -->
 		{% if round.public_votes %}
@@ -37,7 +44,12 @@
 							<td>{{ contribution.total_score }}</td>
 							<td><a href="{{ url_for('contribution', contribution_code=contribution.code) }}">{{ contribution.code }}</a></td>
 							{% if round.public_authors %}
-							<td>{{ contribution.author.name }}</td>
+							<td>
+							{{ contribution.author.name }}
+							{% if contribution.id == round.winning_contribution_id|int %}
+							<span class="badge badge-success">Winner</span>
+							{% endif %}
+							</td>
 							{% endif %}
 						</tr>
 						{% endfor %}

@@ -1,13 +1,14 @@
 from storanonymizer import app, models, auth, utils, db, lm
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_required, logout_user, current_user
-from random import shuffle
+from random import choice
 from operator import attrgetter
 from itertools import groupby
 
 @app.route("/")
 def index():
     stories = models.Story.query.all()
+    stories.reverse()
 
     # calculate the number of unique contributors to a story
     for s in stories:
@@ -219,7 +220,22 @@ def round(round_code):
         if models.Contribution.query.filter_by(round_id=round.id, author_id=current_user.id).first():
             userHasContributed = True
 
-    return render_template("round.html", round=round, contributions=contributions, userHasContributed=userHasContributed)
+    chance = 0
+
+    if round.public_votes:
+        winning_score = -1
+
+        for c in contributions:
+            c.total_score = sum([vote.value for vote in c.votes])
+
+            if c.id == int(round.winning_contribution_id):
+                winning_score = c.total_score
+
+        total_score = sum([c.total_score for c in contributions])
+        chance = int((winning_score / total_score) * 100)
+        print(f"{winning_score} / {total_score} = {chance}%")
+
+    return render_template("round.html", round=round, contributions=contributions, userHasContributed=userHasContributed, chance=chance)
 
 @app.route("/story/<story_code>/settings")
 @login_required
@@ -364,9 +380,17 @@ def votes(round_code):
     contributions = round.contributions
     all_votes = None
     user_votes = None
+    winning_score = -1
 
     for c in contributions:
         c.total_score = sum([vote.value for vote in c.votes])
+
+        if c.id == int(round.winning_contribution_id):
+            winning_score = c.total_score
+
+    total_score = sum([c.total_score for c in contributions])
+    chance = int((winning_score / total_score) * 100)
+    print(f"{winning_score} / {total_score} = {chance}%")
 
     if current_user.is_authenticated:
         user_votes = models.Vote.query.filter_by(round_id=round.id, user_id=current_user.id).order_by(models.Vote.value.desc())
@@ -374,7 +398,7 @@ def votes(round_code):
     if round.public_votes:
         all_votes = models.Vote.query.filter_by(round_id=round.id).all()
 
-    return render_template("votes.html", round=round, user_votes=user_votes, ranking=contributions, all_votes=all_votes)
+    return render_template("votes.html", round=round, user_votes=user_votes, ranking=contributions, all_votes=all_votes, chance=chance)
 
 @app.route("/round/<round_code>/toggle/voting")
 @login_required
@@ -445,13 +469,22 @@ def toggle_public_votes(round_code):
          Calculate contribution with the most points from votes
         """
         contributions = round.contributions
+        distribution = []
 
         for c in contributions:
             c.total_score = sum([vote.value for vote in c.votes])
+            distribution += [c.id] * c.total_score
 
-        winning_contribution = max(contributions, key=attrgetter("total_score"))
+        # Calculate winning contribution by drawing from weighted
+        # probability distribution based on votes.
+        # OLD METHOD: contribution with most voting points would win
+        #winning_contribution = max(contributions, key=attrgetter("total_score"))
 
-        round.winning_contribution_id = winning_contribution.id
+        if round.winning_contribution_id is None:
+            round.winning_contribution_id = choice(distribution)
+            print(f"Winning contribution has id {round.winning_contribution_id}")
+        else:
+            print(f"There is already a winner. We won't change the winning contribution.")
 
         db.session.add(round)
         db.session.commit()
