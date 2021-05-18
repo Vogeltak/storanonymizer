@@ -1,0 +1,5 @@
+- [x] Add dates to lifecycle of Rounds
+- [x] Generate new database schema
+- [x] Add enum type for Bonus (ORIGINALITY, STYLE)
+- [ ] Include bonus buttons in template
+- [ ] Display datetime somewhere
