@@ -1,5 +1,7 @@
 - [x] Add dates to lifecycle of Rounds
 - [x] Generate new database schema
 - [x] Add enum type for Bonus (ORIGINALITY, STYLE)
-- [ ] Include bonus buttons in template
+- [x] Include bonus buttons in template
 - [ ] Display datetime somewhere
+- [ ] Change HTTP method for voting to POST
+- [ ] Properly display bonus votes in vote overview page
