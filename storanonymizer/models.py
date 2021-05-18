@@ -1,4 +1,5 @@
-from storanonymizer import db
+from datetime import datetime
+from storanonymizer import db, Bonus
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -69,10 +70,15 @@ class Round(db.Model):
     voting = db.Column(db.Boolean(), default=False)
     public_votes = db.Column(db.Boolean(), default=False)
 
+    init_datetime = db.Column(db.DateTime())
+    publish_datetime = db.Column(db.DateTime())
+    vote_datetime = db.Column(db.DateTime())
+
     def __init__(self, name, code, story_id):
         self.name = name
         self.code = code
         self.story_id = story_id
+        self.init_date = datetime.now()
 
     def __repr__(self):
         return "<Round {}>".format(self.id)
@@ -81,6 +87,7 @@ class Contribution(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(), unique=True)
     text = db.Column(db.Text())
+    submission_datetime = db.Column(db.DateTime())
 
     votes = db.relationship("Vote", backref="contribution", lazy="select")
 
@@ -88,8 +95,9 @@ class Contribution(db.Model):
     round_id = db.Column(db.Integer, db.ForeignKey("round.id"))
 
     def __init__(self, text, code, author_id, round_id):
-        self.text = text
         self.code = code
+        self.text = text
+        self.submission_datetime = datetime.now()
         self.author_id = author_id
         self.round_id = round_id
 

@@ -4,6 +4,7 @@ from flask_login import login_required, logout_user, current_user
 from random import choice
 from operator import attrgetter
 from itertools import groupby
+from datetime import datetime
 
 @app.route("/")
 def index():
@@ -446,6 +447,7 @@ def toggle_public_contributions(round_code):
             round.public_contributions = False
         else:
             round.public_contributions = True
+            round.publish_date = datetime.now()
 
         db.session.add(round)
         db.session.commit()
@@ -464,6 +466,7 @@ def toggle_public_votes(round_code):
             round.public_votes = False
         else:
             round.public_votes = True
+            round.vote_date = datetime.now()
 
         """
          Calculate contribution with the most points from votes
