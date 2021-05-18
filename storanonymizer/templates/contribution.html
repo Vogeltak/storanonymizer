@@ -30,7 +30,11 @@
     			<option value="1" {% if user_vote == 1 %}selected{% endif %}>1</option>
     			<option value="0" {% if user_vote is none %}selected{% endif %}>0</option>
     		  </select>
-    		</div>
+			</div>
+			<div class="btn-group" role="group" aria-label="Bonus points">
+				<button id="originality-bonus" type="button" class="btn {% if orig_vote %}btn-success{% else %}btn-outline-secondary{% endif %}">Originality (3)</button>
+				<button id="style-bonus" type="button" class="btn {% if style_vote %}btn-success{% else %}btn-outline-secondary{% endif %}">Style (3)</button>
+			</div>
     	</div>
     	{% endif %}
 	</div>
@@ -64,6 +68,32 @@ var pointSelector = document.querySelector('#point-selector');
 pointSelector.addEventListener('change', function() {
 	var req = new XMLHttpRequest();
 	req.open('GET', '/vote/{{ contribution.code }}/' + pointSelector.value, true);
+	req.send();
+});
+
+var origBonus = document.querySelector('#originality-bonus');
+
+origBonus.addEventListener('click', function() {
+	if (origBonus.className === 'btn btn-outline-secondary')
+		origBonus.className = 'btn btn-success';
+	else
+		origBonus.className = 'btn btn-outline-secondary';
+
+	var req = new XMLHttpRequest();
+	req.open('GET', '/vote/{{ contribution.code }}/6', true);
+	req.send();
+});
+
+var styleBonus = document.querySelector('#style-bonus');
+
+styleBonus.addEventListener('click', function() {
+	if (styleBonus.className === 'btn btn-outline-secondary')
+		styleBonus.className = 'btn btn-success';
+	else
+		styleBonus.className = 'btn btn-outline-secondary';
+
+	var req = new XMLHttpRequest();
+	req.open('GET', '/vote/{{ contribution.code }}/7', true);
 	req.send();
 });
 

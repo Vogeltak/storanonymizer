@@ -1,4 +1,4 @@
-from storanonymizer import app, models, auth, utils, db, lm
+from storanonymizer import app, models, auth, utils, db, lm, Bonus
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_required, logout_user, current_user
 from random import choice
@@ -234,7 +234,6 @@ def round(round_code):
 
         total_score = sum([c.total_score for c in contributions])
         chance = int((winning_score / total_score) * 100)
-        print(f"{winning_score} / {total_score} = {chance}%")
 
     return render_template("round.html", round=round, contributions=contributions, userHasContributed=userHasContributed, chance=chance)
 
@@ -348,13 +347,20 @@ def my_contributions():
 def contribution(contribution_code):
     contribution = models.Contribution.query.filter_by(code=contribution_code).first_or_404()
 
+    user_vote, orig_vote, style_vote = None, None, None
+
     if current_user.is_authenticated and contribution.round.voting:
-        user_vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).first()
+        user_votes = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).all()
 
-        if user_vote is not None:
-            return render_template("contribution.html", contribution=contribution, user_vote=user_vote.value)
+        for v in user_votes:
+            if v.bonus_type == Bonus.NONE:
+                user_vote = v.value
+            if v.bonus_type == Bonus.ORIGINALITY:
+                orig_vote = True
+            if v.bonus_type == Bonus.STYLE:
+                style_vote = True
 
-    return render_template("contribution.html", contribution=contribution, user_vote=None)
+    return render_template("contribution.html", contribution=contribution, user_vote=user_vote, orig_vote=orig_vote, style_vote=style_vote)
 
 @app.route("/contribution/<contribution_code>/delete")
 def delete_contribution(contribution_code):
@@ -391,7 +397,6 @@ def votes(round_code):
 
     total_score = sum([c.total_score for c in contributions])
     chance = int((winning_score / total_score) * 100)
-    print(f"{winning_score} / {total_score} = {chance}%")
 
     if current_user.is_authenticated:
         user_votes = models.Vote.query.filter_by(round_id=round.id, user_id=current_user.id).order_by(models.Vote.value.desc())
@@ -485,7 +490,6 @@ def toggle_public_votes(round_code):
 
         if round.winning_contribution_id is None:
             round.winning_contribution_id = choice(distribution)
-            print(f"Winning contribution has id {round.winning_contribution_id}")
         else:
             print(f"There is already a winner. We won't change the winning contribution.")
 
@@ -535,6 +539,7 @@ def vote(contribution_code, value):
         else:
             if vote is None:
                 vote = models.Vote()
+                vote.bonus_type = vote_bonus_type
                 vote.contribution_id = contribution.id
                 vote.user_id = current_user.id
                 vote.round_id = contribution.round.id
@@ -545,7 +550,7 @@ def vote(contribution_code, value):
 
             # Properly delete existing votes for other contributions
             # in the case that user gives it to this contribution instead
-            if same_valued_vote is not None:
+            if same_valued_vote is not None and same_valued_vote.contribution_id != contribution.id:
                 db.session.delete(same_valued_vote)
 
             vote.value = value
