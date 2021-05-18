@@ -107,6 +107,7 @@ class Contribution(db.Model):
 class Vote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer)
+    bonus_type = db.Column(db.Enum(Bonus), default=Bonus.NONE)
     contribution_id = db.Column(db.Integer, db.ForeignKey("contribution.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     round_id = db.Column(db.Integer, db.ForeignKey("round.id"))

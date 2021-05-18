@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -25,5 +26,8 @@ lm.login_view = "login"
 
 # Create Bcrypt instance
 bcrypt = Bcrypt(app)
+
+# Set up Bonus enum type to distinguish votes
+Bonus = Enum("Bonus", "NONE ORIGINALITY STYLE")
 
 from storanonymizer import views, models, auth, utils

@@ -501,11 +501,37 @@ def toggle_public_votes(round_code):
 def vote(contribution_code, value):
     contribution = models.Contribution.query.filter_by(code=contribution_code).first()
 
-    if contribution.round.voting and str(value) in "012345" and not contribution.author.id == current_user.id:
-        vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id).first()
+    # Regular votes (i.e. non-bonus points)
+    if contribution.round.voting and int(value) in range(8) and not contribution.author.id == current_user.id:
+        # We use the following encoding for votes
+        # 0: Explicitly remove vote for this contribution
+        # 1-5: Regular vote for this contribution
+        # 6: Bonus vote in originality category
+        # 7: Bonus vote in style category
 
-        if value == str(0):
+        vote_bonus_type = Bonus.NONE
+        BONUS_VALUE = 3
+
+        # Figure out which type of vote we are handling first
+        if int(value) == 6:
+            vote_bonus_type = Bonus.ORIGINALITY
+            value = BONUS_VALUE
+        elif int(value) == 7:
+            vote_bonus_type = Bonus.STYLE
+            value = BONUS_VALUE
+
+        # Retrieve vote that might already exist
+        vote = models.Vote.query.filter_by(user_id=current_user.id, contribution_id=contribution.id, bonus_type=vote_bonus_type).first()
+
+        # If a specific bonus vote already exists,
+        # a second call to this endpoint means the user wants
+        # to retract its bonus vote for this contribution.
+        if vote is not None and vote_bonus_type != Bonus.NONE:
             db.session.delete(vote)
+        # By providing value 0, user explicitly retracts their vote
+        elif value == str(0):
+            db.session.delete(vote)
+        # Remaining case: new vote to record
         else:
             if vote is None:
                 vote = models.Vote()
@@ -513,8 +539,12 @@ def vote(contribution_code, value):
                 vote.user_id = current_user.id
                 vote.round_id = contribution.round.id
 
-            same_valued_vote = models.Vote.query.filter_by(user_id=current_user.id, round_id=contribution.round.id, value=value).first()
+            # Check if user had given this specific vote to
+            # a different contribution already
+            same_valued_vote = models.Vote.query.filter_by(user_id=current_user.id, round_id=contribution.round.id, bonus_type=vote_bonus_type, value=value).first()
 
+            # Properly delete existing votes for other contributions
+            # in the case that user gives it to this contribution instead
             if same_valued_vote is not None:
                 db.session.delete(same_valued_vote)
 
