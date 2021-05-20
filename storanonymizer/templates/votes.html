@@ -47,7 +47,7 @@
 							<td>
 							{{ contribution.author.name }}
 							{% if contribution.id == round.winning_contribution_id|int %}
-							<span class="badge badge-success">Winner</span>
+							<span class="badge badge-success">Winner ({{ chance }}%)</span>
 							{% endif %}
 							</td>
 							{% endif %}
@@ -76,6 +76,7 @@
 					</thead>
 					<tbody>
 					{% for v in user_votes %}
+						{% if v.bonus_type == Bonus.NONE or v.bonus_type == None %}
 						<tr>
 							<td>{{ v.value }}</td>
 							<td><a href="{{ url_for('contribution', contribution_code=v.contribution.code) }}">{{ v.contribution.code }}</a></td>
@@ -83,6 +84,26 @@
 							<td>{{ v.contribution.author.name }}</td>
 							{% endif %}
 						</tr>
+						{% endif %}
+					{% endfor %}
+					{% for v in user_votes %}
+						{% if v.bonus_type == Bonus.ORIGINALITY %}
+						<tr>
+							<td><span class="badge badge-secondary">Originality (3)</span></td>
+							<td><a href="{{ url_for('contribution', contribution_code=v.contribution.code) }}">{{ v.contribution.code }}</a></td>
+							{% if round.public_authors %}
+							<td>{{ v.contribution.author.name }}</td>
+							{% endif %}
+						</tr>
+						{% elif v.bonus_type == Bonus.STYLE %}
+						<tr>
+							<td><span class="badge badge-secondary">Style (3)</span></td>
+							<td><a href="{{ url_for('contribution', contribution_code=v.contribution.code) }}">{{ v.contribution.code }}</a></td>
+							{% if round.public_authors %}
+							<td>{{ v.contribution.author.name }}</td>
+							{% endif %}
+						</tr>
+						{% endif %}
 					{% endfor %}
 					</tbody>
 				</table>
@@ -109,15 +130,36 @@
 				</tr>
 			</thead>
 			<tbody>
-			{% for vote in group.list|sort(True, attribute='value') %}
+				{% for v in group.list|sort(True, attribute='value') %}
+				{% if v.bonus_type == Bonus.NONE or v.bonus_type == None %}
 				<tr>
-					<td>{{ vote.value }}</td>
-					<td><a href="{{ url_for('contribution', contribution_code=vote.contribution.code) }}">{{ vote.contribution.code }}</a></td>
+					<td>{{ v.value }}</td>
+					<td><a href="{{ url_for('contribution', contribution_code=v.contribution.code) }}">{{ v.contribution.code }}</a></td>
 					{% if round.public_authors %}
-					<td>{{ vote.contribution.author.name }}</td>
+					<td>{{ v.contribution.author.name }}</td>
 					{% endif %}
 				</tr>
-			{% endfor %}
+				{% endif %}
+				{% endfor %}
+				{% for v in group.list|sort(True, attribute='value') %}
+				{% if v.bonus_type == Bonus.ORIGINALITY %}
+				<tr>
+					<td><span class="badge badge-secondary">Originality (3)</span></td>
+					<td><a href="{{ url_for('contribution', contribution_code=v.contribution.code) }}">{{ v.contribution.code }}</a></td>
+					{% if round.public_authors %}
+					<td>{{ v.contribution.author.name }}</td>
+					{% endif %}
+				</tr>
+				{% elif v.bonus_type == Bonus.STYLE %}
+				<tr>
+					<td><span class="badge badge-secondary">Style (3)</span></td>
+					<td><a href="{{ url_for('contribution', contribution_code=v.contribution.code) }}">{{ v.contribution.code }}</a></td>
+					{% if round.public_authors %}
+					<td>{{ v.contribution.author.name }}</td>
+					{% endif %}
+				</tr>
+				{% endif %}
+				{% endfor %}
 			</tbody>
 		</table>
 	</div>

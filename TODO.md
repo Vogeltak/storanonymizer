@@ -4,4 +4,4 @@
 - [x] Include bonus buttons in template
 - [ ] Display datetime somewhere
 - [ ] Change HTTP method for voting to POST
-- [ ] Properly display bonus votes in vote overview page
+- [x] Properly display bonus votes in vote overview page

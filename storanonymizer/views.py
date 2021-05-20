@@ -392,7 +392,7 @@ def votes(round_code):
     for c in contributions:
         c.total_score = sum([vote.value for vote in c.votes])
 
-        if c.id == int(round.winning_contribution_id):
+        if round.public_votes and c.id == int(round.winning_contribution_id):
             winning_score = c.total_score
 
     total_score = sum([c.total_score for c in contributions])
@@ -404,7 +404,7 @@ def votes(round_code):
     if round.public_votes:
         all_votes = models.Vote.query.filter_by(round_id=round.id).all()
 
-    return render_template("votes.html", round=round, user_votes=user_votes, ranking=contributions, all_votes=all_votes, chance=chance)
+    return render_template("votes.html", round=round, user_votes=user_votes, ranking=contributions, all_votes=all_votes, chance=chance, Bonus=Bonus)
 
 @app.route("/round/<round_code>/toggle/voting")
 @login_required
