@@ -452,7 +452,7 @@ def toggle_public_contributions(round_code):
             round.public_contributions = False
         else:
             round.public_contributions = True
-            round.publish_date = datetime.now()
+            round.publish_datetime = datetime.now()
 
         db.session.add(round)
         db.session.commit()
@@ -471,7 +471,7 @@ def toggle_public_votes(round_code):
             round.public_votes = False
         else:
             round.public_votes = True
-            round.vote_date = datetime.now()
+            round.vote_datetime = datetime.now()
 
         """
          Calculate contribution with the most points from votes

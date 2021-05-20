@@ -5,6 +5,14 @@
 	<div class="container">
 		<h1 class="display-4">{{ round.name }}</h1>
 		<p class="lead">Round in the story <a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }} </a></p>
+		{% if round.init_datetime %}
+		<p class="text-secondary">
+			{{ round.init_datetime.strftime('%b %d, %Y') }}
+			{% if round.vote_datetime %}
+			- {{ round.vote_datetime.strftime('%b %d, %Y') }}
+			{% endif %}
+		</p>
+		{% endif %}
 		{% if round.public_contributions %}
 		<span class="badge badge-primary">published</span>
 		{% else %}

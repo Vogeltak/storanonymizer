@@ -16,8 +16,13 @@
     	</div>
     	{% if contribution.round.public_authors or contribution.author.id == current_user.id %}
     	<div class="row justify-content-center">
-    		<h6 class="text-muted">Written by {{ contribution.author.name }}</h6>
+    		<h6 class="text-dark">Written by {{ contribution.author.name }}</h6>
+		</div>
+		{% if contribution.submission_datetime %}
+    	<div class="row justify-content-center">
+			<p class="text-muted">{{ contribution.submission_datetime.strftime('%b %d, %Y') }}</p>
     	</div>
+		{% endif %}
     	{% endif %}
     	{% if contribution.round.voting and current_user.is_authenticated and contribution.author.id != current_user.id %}
     	<div class="row justify-content-center">

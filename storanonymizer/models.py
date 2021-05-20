@@ -78,7 +78,7 @@ class Round(db.Model):
         self.name = name
         self.code = code
         self.story_id = story_id
-        self.init_date = datetime.now()
+        self.init_datetime = datetime.now()
 
     def __repr__(self):
         return "<Round {}>".format(self.id)
