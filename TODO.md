@@ -5,3 +5,4 @@
 - [ ] Display datetime somewhere
 - [ ] Change HTTP method for voting to POST
 - [x] Properly display bonus votes in vote overview page
+- [ ] Update card styling: border=`#e1dfd0`, bg=`#f5f4ef`, no shadow
