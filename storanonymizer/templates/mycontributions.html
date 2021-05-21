@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron bg-light">
+<div class="jumbotron">
 	<div class="container">
 		<h1>Your contributions</h1>
 	</div>
@@ -14,7 +14,7 @@
 	<div class="row">
 		{% for c in contributions %}
 		<div class="col-12 col-md-6 mb-4">
-			<div class="card shadow-sm">
+			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('contribution', contribution_code=c.code) }}">
 						{{ c.code }}</a>

@@ -2,10 +2,10 @@
 
 {% block content %}
 {% if contribution.round.public_contributions or contribution.author.id == current_user.id %}
-<div class="jumbotron bg-light">
+<div class="jumbotron">
 	<div class="container">
     	<nav aria-label="breadcrumb">
-    		<ol class="breadcrumb justify-content-center bg-light">
+    		<ol class="breadcrumb justify-content-center">
     			<li class="breadcrumb-item"><a href="{{ url_for('story', story_code=contribution.round.story.code) }}">{{ contribution.round.story.name }}</a></li>
     			<li class="breadcrumb-item"><a href="{{ url_for('round', round_code=contribution.round.code) }}">{{ contribution.round.name }}</a></li>
     			<li class="breadcrumb-item active" aria-current="page">{{ contribution.code }}</li>
@@ -46,8 +46,8 @@
 </div>
 
 <div class="container">
-	<div class="row justify-content-center mt-3">
-		<div class="col-12 col-lg-7">
+	<div class="row justify-content-center pt-5 pb-5 mb-5 shadow rounded bg-white">
+		<div class="col-12 col-lg-8">
 			<p style="font-size: 1.05rem;">{{ contribution.text | safe }}</p>
 		</div>
 	</div>

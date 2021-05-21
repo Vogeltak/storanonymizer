@@ -1,10 +1,10 @@
 {% extends "base-auth.html" %}
 
 {% block content %}
-<div class="container-fluid bg-light">
+<div class="container-fluid">
 	<div class="col-12 col-md-6 col-lg-4 col-xl-3 pt-5 pb-5">
 		<a href="{{ url_for('index') }}"><h5 class="text-muted text-center">Storanonymizer</h5></a>
-		<div class="card">
+		<div class="card bg-white">
 		<div class="card-body">
 			<h4 class="card-title">Sign up</h4>
 			{% for m in get_flashed_messages() %}

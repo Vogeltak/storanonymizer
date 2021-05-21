@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
 	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb justify-content-center bg-white">
+		<ol class="breadcrumb justify-content-center">
 			<li class="breadcrumb-item"><a href="{{ url_for('story', story_code=story.code) }}">{{ story.name }}</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Full story</li>
 		</ol>
@@ -14,7 +14,7 @@
 	<div class="row justify-content-center">
 		<h6 class="text-muted">Full ongoing story</h6>
 	</div>
-	<div class="row justify-content-center mt-3">
+	<div class="row justify-content-center pt-5 pb-5 mt-5 mb-5 shadow rounded bg-white">
 		<div class="col-12 col-lg-7">
 			{% for c in contributions %}
 			{% if c.round.public_votes %}
