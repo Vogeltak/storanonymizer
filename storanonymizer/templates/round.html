@@ -68,14 +68,14 @@
 		{% endfor %}
 	</div>
 	{% else %}
-	<h6 class="alert alert-light text-center">No contributions submitted</h6>
+	<h6 class="alert text-center">No contributions submitted</h6>
 	{% endif %}
 
 	{% else %}
 	{% if round.contributions|length > 0 %}
-	<h6 class="alert alert-light text-center"><span class="font-weight-bold">{{ round.contributions|length }}</span> {% if round.contributions|length > 1 %}contributions{% else %}contribution{% endif %} submitted</h6>
+	<h6 class="alert text-center"><span class="font-weight-bold">{{ round.contributions|length }}</span> {% if round.contributions|length > 1 %}contributions{% else %}contribution{% endif %} submitted</h6>
 	{% else %}
-	<h6 class="alert alert-light text-center">No contributions submitted yet</h6>
+	<h6 class="alert text-center">No contributions submitted yet</h6>
 	{% endif %}
 
 	{% endif %}

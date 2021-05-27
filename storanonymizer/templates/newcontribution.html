@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron bg-white mb-0">
+<div class="jumbotron mb-0">
 	<div class="container">
 		<h1>New contribution</h1>
 		<p class="lead"><a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }}</a> / <a href="{{ url_for('round', round_code=round.code) }}">{{ round.name }}</a></p>
