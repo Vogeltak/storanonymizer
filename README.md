@@ -10,8 +10,14 @@ A platform to host story writing contests. Setup a contest, create different rou
    ````
 
 ## Screenshots
+The main landing page with an overview of all story contests
+![Storanonymizer landing page](/screenshots/home.jpg)
+
 A story contribution
-![A story contribution](/screenshots/contribution.png)
+![A story contribution](/screenshots/contribution.jpg)
 
 Overview of a round
-![Overview of a round](/screenshots/round.png)
+![Overview of a round](/screenshots/round.jpg)
+
+Voting overview for a single round
+![Votes in a round](/screenshots/votes.jpg)
