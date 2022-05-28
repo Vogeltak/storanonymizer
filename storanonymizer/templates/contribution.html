@@ -2,7 +2,7 @@
 
 {% block content %}
 {% if contribution.round.public_contributions or contribution.author.id == current_user.id %}
-<div class="jumbotron">
+<div class="jumbotron mb-0">
 	<div class="container">
     	<nav aria-label="breadcrumb">
     		<ol class="breadcrumb justify-content-center">
@@ -11,23 +11,24 @@
     			<li class="breadcrumb-item active" aria-current="page">{{ contribution.code }}</li>
     		</ol>
     	</nav>
-    	<div class="row justify-content-center mt-3">
-    		<h1 class="font-weight-bold">{{ contribution.code }}</h1>
-    	</div>
     	{% if contribution.round.public_authors or contribution.author.id == current_user.id %}
     	<div class="row justify-content-center">
-    		<h6 class="text-dark">Written by {{ contribution.author.name }}</h6>
+    		<h2 class="">{{ contribution.author.name }}</h2>
 		</div>
 		{% if contribution.submission_datetime %}
     	<div class="row justify-content-center">
-			<p class="text-muted">{{ contribution.submission_datetime.strftime('%b %d, %Y') }}</p>
+			<h6>{{ contribution.submission_datetime.strftime('%b %d, %Y') }}</h6>
     	</div>
 		{% endif %}
+        {% else %}
+    	<div class="row justify-content-center">
+    		<h2 class="font-weight-bold">{{ contribution.code }}</h2>
+    	</div>
     	{% endif %}
     	{% if contribution.round.voting and current_user.is_authenticated and contribution.author.id != current_user.id %}
     	<div class="row justify-content-center">
     		<div class="col-3 col-md-2 col-lg-1">
-    		  <select class="vote-select custom-select badge badge-light font-weight-normal" id="point-selector">
+    		  <select class="vote-select custom-select badge" id="point-selector">
     			<option value="5" {% if user_vote == 5 %}selected{% endif %}>5</option>
     			<option value="4" {% if user_vote == 4 %}selected{% endif %}>4</option>
     			<option value="3" {% if user_vote == 3 %}selected{% endif %}>3</option>
@@ -37,8 +38,8 @@
     		  </select>
 			</div>
 			<div class="btn-group" role="group" aria-label="Bonus points">
-				<button id="originality-bonus" type="button" class="btn {% if orig_vote %}btn-success{% else %}btn-outline-secondary{% endif %}">Originality (3)</button>
-				<button id="style-bonus" type="button" class="btn {% if style_vote %}btn-success{% else %}btn-outline-secondary{% endif %}">Style (3)</button>
+				<button id="originality-bonus" type="button" class="btn{% if orig_vote %} btn-success{% endif %}">Originality (3)</button>
+				<button id="style-bonus" type="button" class="btn{% if style_vote %} btn-success{% endif %}">Style (3)</button>
 			</div>
     	</div>
     	{% endif %}
@@ -46,8 +47,8 @@
 </div>
 
 <div class="container">
-	<div class="row justify-content-center pt-5 pb-5 mb-5 shadow rounded bg-white">
-		<div class="col-12 col-lg-8">
+	<div class="row justify-content-center mb-5">
+		<div class="card pt-4 pb-4 col-12 col-lg-8">
 			<p style="font-size: 1.05rem;">{{ contribution.text | safe }}</p>
 		</div>
 	</div>
@@ -79,10 +80,10 @@ pointSelector.addEventListener('change', function() {
 var origBonus = document.querySelector('#originality-bonus');
 
 origBonus.addEventListener('click', function() {
-	if (origBonus.className === 'btn btn-outline-secondary')
+	if (origBonus.className === 'btn')
 		origBonus.className = 'btn btn-success';
 	else
-		origBonus.className = 'btn btn-outline-secondary';
+		origBonus.className = 'btn';
 
 	var req = new XMLHttpRequest();
 	req.open('GET', '/vote/{{ contribution.code }}/6', true);
@@ -92,10 +93,10 @@ origBonus.addEventListener('click', function() {
 var styleBonus = document.querySelector('#style-bonus');
 
 styleBonus.addEventListener('click', function() {
-	if (styleBonus.className === 'btn btn-outline-secondary')
+	if (styleBonus.className === 'btn')
 		styleBonus.className = 'btn btn-success';
 	else
-		styleBonus.className = 'btn btn-outline-secondary';
+		styleBonus.className = 'btn';
 
 	var req = new XMLHttpRequest();
 	req.open('GET', '/vote/{{ contribution.code }}/7', true);

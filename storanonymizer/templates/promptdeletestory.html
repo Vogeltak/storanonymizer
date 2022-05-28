@@ -1,15 +1,15 @@
 {% extends "base-auth.html" %}
 
 {% block content %}
-<div class="container-fluid bg-light">
+<div class="container-fluid">
 	<div class="col-12 col-md-6 col-lg-4 col-xl-3 pt-5 pb-5">
-		<a href="{{ url_for('index') }}"><h5 class="text-muted text-center">Storanonymizer</h5></a>
+		<a href="{{ url_for('index') }}"><h5 class="text-center">Storanonymizer</h5></a>
 		<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">Delete</h4>
 			<p class="card-text">Are you sure you want to delete <a href="{{ url_for('story', story_code=story.code) }}">{{ story.name }}</a> permanently? It will be impossible to recover.</p>
-			<a class="card-link btn btn-outline-danger" href="{{ url_for('delete_story', story_code=story.code) }}">Delete</a>
-			<a class="card-link btn btn-secondary" href="{{ url_for('story', story_code=story.code) }}">Cancel</a>
+			<a class="card-link btn btn-danger" href="{{ url_for('delete_story', story_code=story.code) }}">Delete</a>
+			<a class="card-link btn" href="{{ url_for('story', story_code=story.code) }}">Cancel</a>
 		</div>
 		</div>
 	</div>

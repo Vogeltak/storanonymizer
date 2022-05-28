@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron">
+<div class="jumbotron text-center">
 	<div class="container">
 		<h1>Story settings</h1>
 		<p class="lead"><a href="{{ url_for('story', story_code=story.code) }}">{{ story.name }}</a></p>
 		<a href="{{ url_for('new_round', story_code=story.code) }}" class="btn btn-success">New round</a>
-		<a href="{{ url_for('prompt_delete_story', story_code=story.code) }}" class="btn btn-outline-danger">Delete</a>
+		<a href="{{ url_for('prompt_delete_story', story_code=story.code) }}" class="btn btn-danger">Delete</a>
 	</div>
 </div>
 

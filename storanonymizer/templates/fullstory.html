@@ -9,16 +9,16 @@
 		</ol>
 	</nav>
 	<div class="row justify-content-center mt-3">
-		<h1 class="font-weight-bold">{{ story.name }}</h1>
+		<h2>{{ story.name }}</h2>
 	</div>
 	<div class="row justify-content-center">
-		<h6 class="text-muted">Full ongoing story</h6>
+		<h6>Full ongoing story</h6>
 	</div>
-	<div class="row justify-content-center pt-5 pb-5 mt-5 mb-5 shadow rounded bg-white">
-		<div class="col-12 col-lg-7">
+	<div class="row justify-content-center mt-5 mb-5">
+		<div class="card pt-4 pb-4 col-12 col-lg-8">
 			{% for c in contributions %}
 			{% if c.round.public_votes %}
-			<h2>{{ c.round.name }}</h2>
+			<h3>{{ c.round.name }}</h3>
 			<p style="font-size: 1.05rem;">{{ c.text | safe }}</p>
 			{% endif %}
 			{% endfor %}

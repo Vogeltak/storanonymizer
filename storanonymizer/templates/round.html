@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron">
+<div class="jumbotron text-center">
 	<div class="container">
-		<h1 class="display-4">{{ round.name }}</h1>
+		<h1 class="mb-4">{{ round.name }}</h1>
 		<p class="lead">Round in the story <a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }} </a></p>
 		{% if round.init_datetime %}
-		<p class="text-secondary">
+		<p class="lead">
 			{{ round.init_datetime.strftime('%b %d, %Y') }}
 			{% if round.vote_datetime %}
 			- {{ round.vote_datetime.strftime('%b %d, %Y') }}
@@ -29,11 +29,11 @@
 		<a class="btn btn-success" href="{{ url_for('new_contribution', round_code=round.code) }}">New</a>
 		{% endif %}
 		{% if round.voting or round.public_votes %}
-		<a class="btn btn-outline-secondary" href="{{ url_for('votes', round_code=round.code) }}">Votes</a>
+		<a class="btn" href="{{ url_for('votes', round_code=round.code) }}">Votes</a>
 		{% endif %}
-		<a class="btn btn-outline-secondary" href="{{ url_for('round_statistics', round_code=round.code) }}">Statistics</a>
+		<a class="btn" href="{{ url_for('round_statistics', round_code=round.code) }}">Statistics</a>
 		{% if current_user.id == round.story.user.id %}
-		<a class="btn btn-outline-secondary" href="{{ url_for('round_settings', round_code=round.code) }}">Settings</a>
+		<a class="btn" href="{{ url_for('round_settings', round_code=round.code) }}">Settings</a>
 		{% endif %}
 	</div>
 </div>
@@ -54,10 +54,10 @@
 						{% endif %}
 					</h5>
 					{% if c.author.id == current_user.id %}
-					<h6 class="card-subtitle mb-2 text-muted">written by me</h6>
+					<h6 class="card-subtitle mb-2">written by me</h6>
 					{% else %}
 					{% if round.public_authors %}
-					<h6 class="card-subtitle mb-2 text-muted">written by <span class="font-weight-bold">{{ c.author.name }}</span></h6>
+					<h6 class="card-subtitle mb-2">written by <span class="font-weight-bold">{{ c.author.name }}</span></h6>
 					{% endif %}
 					{% endif %}
 					<p class="card-text" style="font-size: 0.9rem;">{{ c.text|truncate|safe }}</p>
