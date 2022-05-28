@@ -6,7 +6,7 @@
 	<div class="col-md-6 p-lg-5 mx-auto my-2">
 		<h3>Welcome back, {{ current_user.name }}</h3>
 		<p class="font-weight-normal">You can create a new story or contribute to one of the existing stories.</p>
-		<a class="btn btn-success" href="{{ url_for('new_story') }}">Create new story</a>
+		<a class="btn" href="{{ url_for('new_story') }}">Create new story</a>
 	</div>
 </div>
 {% else %}
@@ -14,7 +14,7 @@
 	<div class="col-md-5 p-lg-5 mx-auto my-5">
 		<h1 class="display-4 font-weight-normal">Story competition</h1>
 		<p class="lead font-weight-normal">Participate in anonymous story writing contests with friends and strangers.</p>
-		<a class="btn btn-outline-dark" href="#">Learn more</a>
+		<a class="btn" href="#">Learn more</a>
 	</div>
 </div>
 {% endif %}
@@ -23,12 +23,11 @@
 	<div class="row justify-content-center">
 		{% for s in stories %}
 		<div class="col-12 col-md-6 mb-4">
-			<div class="card shadow">
+			<div class="card">
 				<a href="{{ url_for('story', story_code=s.code) }}"><img class="card-img-top" src="{{ url_for('static', filename=s.name + '.jpeg') }}"></a>
 				<div class="card-body">
 					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('story', story_code=s.code) }}">{{ s.name }}</a></h5>
 					<p class="card-text"><span class="badge badge-dark">{{ s.rounds|length }} rounds</span> <span class="badge badge-primary">{{ s.contributors|length }} participants</span></p>
-					<a href="{{ url_for('story', story_code=s.code) }}" class="card-link">View</a>
 				</div>
 			</div>
 		</div>

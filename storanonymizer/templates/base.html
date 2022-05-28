@@ -22,7 +22,7 @@
 			<a href="{{ url_for('index') }}" class="navbar-brand font-weight-bold">Storanonymizer</a>
 			<div class="dropdown dropleft">
 				{% if current_user.is_authenticated %}
-				<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<button class="btn dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					{{ current_user.name }}
 				</button>
 				<div class="dropdown-menu" aria-labelledby="userMenu">
@@ -33,13 +33,16 @@
 				</div>
 				{% else %}
 				<div>
-					<a class="btn btn-outline-dark" href="{{ url_for('register') }}">Sign up</a>
-					<a class="btn btn-primary" href="{{ url_for('login') }}">Login</a>
+					<a class="btn" href="{{ url_for('register') }}">Sign up</a>
+					<a class="btn" href="{{ url_for('login') }}">Login</a>
 				</div>
 				{% endif %}
 			</div>
 		</nav>
 		{% block content %}{% endblock %}
+        <footer class="container mt-4 mb-4 text-center text-muted">
+            <p><a href="https://github.com/Vogeltak/storanonymizer" target="_blank">Storanonymizer</a> is a project by Max Crone and friends.</p>
+        </footer>
 
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->

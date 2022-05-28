@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron mb-0">
+<div class="jumbotron mb-0 text-center">
 	<div class="container">
 		<h1>Votes</h1>
 		<p class="lead"><a href="{{ url_for('story', story_code=round.story.code) }}">{{ round.story.name }}</a> / <a href="{{ url_for('round', round_code=round.code) }}">{{ round.name }}</a></p>
@@ -25,7 +25,7 @@
 	<div class="row">
 		<!-- First: results -->
 		{% if round.public_votes %}
-		<div class="card col-12 col-md-6">
+		<div class="card col-12 col-md-6 mb-3">
 			<div class="card-body">
 				<h4 class="card-title">Results</h4>
 				<table class="table table-sm">
@@ -61,7 +61,7 @@
 		
 		<!-- Second: account votes -->
 		{% if (round.voting or round.public_votes) and round.public_contributions and current_user.is_authenticated %}
-		<div class="card col-12 col-md-6 col-xl-5 {% if round.public_votes %}offset-xl-1{% endif %}">
+		<div class="card col-12 col-md-6 col-xl-5 mb-3 {% if round.public_votes %}offset-xl-1{% endif %}">
 			<div class="card-body">
 				<h4 class="card-title">Your votes</h4>
 				<table class="table table-sm">
@@ -114,7 +114,7 @@
 	
 	<!-- Third: all votes split by voter -->
 	{% if round.public_votes %}
-	<h4 class="card-title text-center mt-4 mb-4"><a class="btn btn-outline-primary" data-toggle="collapse" href="#allvotes" role="button" aria-expanded="false" aria-controls="allvotes">All votes</a></h4>
+	<h4 class="card-title text-center mt-4 mb-4"><a class="btn" data-toggle="collapse" href="#allvotes" role="button" aria-expanded="false" aria-controls="allvotes">All votes</a></h4>
 	<div class="card-text row collapse" id="allvotes">
 	{% for group in all_votes|groupby('user.name') %}
 	<div class="card card-body col-12 col-md-6 col-xl-4">

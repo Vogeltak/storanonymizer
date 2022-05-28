@@ -1,8 +1,143 @@
+:root {
+    --primary: #fee77b;
+    --dark: #333;
+    --yellow-light: #fef5ca;
+    --blue: #5591cf;
+    --green: #aeda91;
+    --red: #d7928a;
+}
+
 body, .jumbotron, .breadcrumb {
 		background-color: #fbf7f0;
 }
 
-.card {
-		border: 0.0625rem solid #e1dfd0;
+a {
+    color: var(--blue);
+    font-weight: bold;
+    text-decoration: underline;
 }
 
+.card {
+        border: 2px solid black;
+}
+
+    .card:hover, .card:active {
+        /*box-shadow: 0 4px 4px rgba(0,0,0,0.2);*/
+    }
+
+.btn {
+    border: 2px solid black;
+    font-weight: bold;
+}
+
+    .btn:hover, .btn:active {
+        text-decoration: underline;
+        background: var(--primary);
+    }
+
+    .btn:focus {
+        box-shadow: none;
+    }
+
+    .btn-success {
+        background-color: var(--green);
+        color: #212529;
+    }
+
+        .btn-success:hover {
+            background: #9cc482;
+            border-color: black;
+            color: #212529;
+        }
+
+    .btn-danger {
+        background-color: var(--red);
+        color: #212529;
+    }
+
+        .btn-danger:hover {
+            background: #cc7368;
+            border-color: black;
+            color: #212529;
+        }
+
+.dropdown-menu {
+    border: 1px solid black;
+}
+
+    .dropdown-item:hover {
+        background: var(--primary);
+        text-decoration: underline;
+    }
+
+    .dropdown-item:focus, .dropdown-item:active {
+        background: var(--primary);
+        color: #212529;
+        text-decoration: underline;
+    }
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: var(--blue);
+    background-color: var(--blue);
+}
+
+.form-control {
+    border: 2px solid black;
+}
+
+    .form-control:focus {
+        background-color: var(--yellow-light);
+        box-shadow: none;
+        border-color: black;
+    }
+
+.table thead th {
+    border-bottom: 2px solid black;
+}
+
+.table td, .table th {
+    border-top: 1px solid black;
+}
+
+.badge {
+    background-color: transparent;
+    border: 2px solid black;
+    color: #212529;
+}
+
+    .badge:focus {
+        background-color: var(--primary);
+        border-color: black;
+        box-shadow: none;
+    }
+
+    .badge-warning {
+        background-color: var(--blue);
+    }
+
+    .badge-primary {
+        background-color: var(--primary);
+    }
+
+    .badge-secondary {
+        background-color: var(--green);
+    }
+
+    .badge-dark {
+        background-color: var(--dark);
+        color: white;
+    }
+
+    .badge-success {
+        background-color: var(--primary);
+    }
+
+#allvotes {
+    background-color: white;
+    border: 2px solid black;
+}
+
+#allvotes .card {
+    border: none;
+    border-radius: 0;
+}
