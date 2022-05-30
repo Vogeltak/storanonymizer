@@ -14,7 +14,7 @@
 	<div class="row">
 		{% for c in contributions %}
 		<div class="col-12 col-md-6 mb-4">
-			<div class="card">
+			<div class="card clickable">
 				<div class="card-body">
 					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('contribution', contribution_code=c.code) }}">
 						{{ c.code }}</a>

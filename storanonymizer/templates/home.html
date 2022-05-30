@@ -23,7 +23,7 @@
 	<div class="row justify-content-center">
 		{% for s in stories %}
 		<div class="col-12 col-md-6 mb-4">
-			<div class="card">
+			<div class="card clickable">
 				<a href="{{ url_for('story', story_code=s.code) }}"><img class="card-img-top" src="{{ url_for('static', filename=s.name + '.jpeg') }}"></a>
 				<div class="card-body">
 					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('story', story_code=s.code) }}">{{ s.name }}</a></h5>

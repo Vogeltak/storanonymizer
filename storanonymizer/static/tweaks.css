@@ -19,15 +19,19 @@ a {
 
 .card {
         border: 2px solid black;
+        transition: all .14s ease-out;
 }
 
-    .card:hover, .card:active {
+    .clickable:hover:not(:active) {
         /*box-shadow: 0 4px 4px rgba(0,0,0,0.2);*/
+        box-shadow: 0.25rem 0.25rem black;
+        transform: translate(-0.25rem,-.25rem);
     }
 
 .btn {
     border: 2px solid black;
     font-weight: bold;
+    transition: all .14s ease-out;
 }
 
     .btn:hover, .btn:active {

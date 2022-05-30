@@ -18,7 +18,7 @@
 	<div class="row">
 	{% for round in rounds %}
 		<div class="col-12 col-md-6 mb-4">
-			<div class="card">
+			<div class="card clickable">
 				<div class="card-body">
 					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('round', round_code=round.code) }}">{{ round.name }}</a></h5>
 					<p class="card-text">{{ round.contributions|length }} {% if round.contributions|length != 1 %}contributions{% else %}contribution{% endif %}{% if round.public_contributions%} <span class="badge badge-primary">published</span> {% else %} <span class="badge badge-secondary">open</span> {% endif %}{% if round.voting %} <span class="badge badge-secondary">voting</span> {% endif %}{% if round.public_votes %} <span class="badge badge-warning">voted</span> {% endif %}</p>
