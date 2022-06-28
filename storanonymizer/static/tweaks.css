@@ -34,7 +34,7 @@ a {
     transition: all .14s ease-out;
 }
 
-    .btn:hover, .btn:active {
+    .btn:hover {
         text-decoration: underline;
         background: var(--primary);
     }
