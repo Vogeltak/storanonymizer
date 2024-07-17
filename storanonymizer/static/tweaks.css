@@ -28,6 +28,11 @@ a {
         transform: translate(-0.25rem,-.25rem);
     }
 
+#contribution-content {
+    border: 1px solid #00000020;
+    border-radius: 1rem;
+}
+
 .btn {
     border: 2px solid black;
     font-weight: bold;
