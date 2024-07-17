@@ -9,8 +9,7 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 
 # Set secret key for signing sessions etc.
-# REMEMBER TO CHANGE THIS BEFORE DEPLOYING TO PRODUCTION
-app.secret_key = b"\x8b\x19\x0ei\xe3\x87YC\x0b\xdf\x9a6\xdf\xbe\xdf\xd2\xce\xd0\x8f\xa3\xe5\xfen\xe0\xc3\x91U\xc6\xc1\x9f*\xfc |k\r\xac\xb9\xe8o\x97\x8bK\xf5\rf\x03\x04\xe40"
+app.secret_key = os.environ["STORANONYMIZER_KEY"]
 
 # Set app configs
 basedir = "/data"
