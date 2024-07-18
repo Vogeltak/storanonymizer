@@ -11,9 +11,9 @@
 	{% for m in get_flashed_messages() %}
 	<p class="text-danger">{{ m }}</p>
 	{% endfor %}
-	<div class="row">
+	<div class="row justify-content-center">
 		{% for c in contributions %}
-		<div class="col-12 col-md-6 mb-4">
+		<div class="col-10 col-md-4 col-lg-3 mb-4">
 			<div class="card clickable">
 				<div class="card-body">
 					<h5 class="card-title"><a class="text-dark font-weight-bold" href="{{ url_for('contribution', contribution_code=c.code) }}">
@@ -22,7 +22,7 @@
 						<span class="badge badge-success">Winner</span>
 						{% endif %}
 					</h5>
-					<h6 class="card-subtitle text-secondary">Contribution to {{ c.round.name }} in {{ c.round.story.name }}</h6>
+					<h6 class="card-subtitle text-secondary mb-2">Contribution to {{ c.round.name }} in {{ c.round.story.name }}</h6>
 					<p class="card-text" style="font-size: 0.9rem;">{{ c.text|truncate|safe }}</p>
 					<a href="{{ url_for('contribution', contribution_code=c.code) }}" class="card-link">Read</a>
 					{% if c.round.public_contributions == False %}

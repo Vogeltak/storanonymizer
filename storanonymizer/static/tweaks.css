@@ -1,14 +1,16 @@
 :root {
-    --primary: #fee77b;
+    --primary: #f5fc1f;
     --dark: #333;
-    --yellow-light: #fef5ca;
-    --blue: #5591cf;
-    --green: #aeda91;
-    --red: #d7928a;
+    --light: #ffffd5;
+    --blue: #17aefd;
+    --green: #6cffb9;
+    --dark-green: #46bd84;
+    --red: #f72585;
+    --dark-red: #c31b64;
 }
 
 body, .jumbotron, .breadcrumb {
-		background-color: #fbf7f0;
+		background-color: #faf2fc;
 }
 
 a {
@@ -18,7 +20,7 @@ a {
 }
 
 .card {
-        border: 2px solid black;
+        border: 1px solid black;
         transition: all .14s ease-out;
 }
 
@@ -34,8 +36,9 @@ a {
 }
 
 .btn {
-    border: 2px solid black;
+    border: 1px solid black;
     font-weight: bold;
+    text-decoration: none;
     transition: all .14s ease-out;
 }
 
@@ -54,7 +57,7 @@ a {
     }
 
         .btn-success:hover {
-            background: #9cc482;
+            background: var(--dark-green);
             border-color: black;
             color: #212529;
         }
@@ -65,7 +68,7 @@ a {
     }
 
         .btn-danger:hover {
-            background: #cc7368;
+            background: var(--dark-red);
             border-color: black;
             color: #212529;
         }
@@ -95,7 +98,7 @@ a {
 }
 
     .form-control:focus {
-        background-color: var(--yellow-light);
+        background-color: var(--light);
         box-shadow: none;
         border-color: black;
     }
@@ -110,7 +113,7 @@ a {
 
 .badge {
     background-color: transparent;
-    border: 2px solid black;
+    border: 1px solid #000000aa;
     color: #212529;
 }
 
@@ -143,7 +146,7 @@ a {
 
 #allvotes {
     background-color: white;
-    border: 2px solid black;
+    border: 1px solid black;
 }
 
 #allvotes .card {
