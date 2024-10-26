@@ -15,4 +15,4 @@ MarkupSafe==2.1.5
 SQLAlchemy==2.0.31
 tornado==6.4.1
 typing_extensions==4.12.2
-Werkzeug==3.0.3
+Werkzeug==3.0.6
